@@ -3,11 +3,7 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header class="flex justify-between items-center p-4">
-    <h1 class="text-2xl font-bold">CoCovoit</h1>
-    <ThemeToggle />
-  </header>
-  <RouterView />
+    <router-view />
 </template>
 
 <style>
