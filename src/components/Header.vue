@@ -32,11 +32,6 @@ defineProps<{
     }
 }>();
 
-const user = {
-    name: 'Matteo Nossereau',
-    avatar: 'https://github.com/Matteo-Nossro.png'
-}
-
 </script>
 
 <style scoped lang="scss">
@@ -49,6 +44,11 @@ const user = {
     height: 65px;
     width: 100%;
     box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
     
     .right-side {
         display: flex;
