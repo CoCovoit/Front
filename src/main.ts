@@ -16,17 +16,15 @@ const pinia = createPinia()
 app.use(pinia)
 app.use(router)
 app.use(PrimeVue, {
+  // Default theme configuration
   theme: {
-    preset: {
-      light: Aura,
-      dark: Aura
-    },
-    options: {
-      prefix: 'p',
-      darkModeSelector: 'white', // Valeur par défaut en 'white'
-      cssLayer: false
-    }
+      preset: Aura,
+      options: {
+          prefix: 'p',
+          darkModeSelector: 'white',
+          cssLayer: false
+      }
   }
-})
+});
 
 app.mount('#app') 
