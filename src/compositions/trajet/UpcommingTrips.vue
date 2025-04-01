@@ -81,7 +81,7 @@ defineProps<{
             border: 1px solid #CBD5E1;
             background-color: transparent;
             color: #000;
-            border-radius: 10px;
+            border-radius: 6px;
             padding: 9px 16px;
             font-size: 14px;
             font-weight: 600;

@@ -3,7 +3,7 @@
         <div class="dashboard-page-left">
             <DefaultContainer title="Mon prochain trajet réservé">
                 <div class="content">
-                    <p>Vous n'avez pas de trajets</p>
+                    <NextTrip :trajet="trajets[0]" />
                 </div>
             </DefaultContainer>
             <DefaultContainer>
@@ -59,9 +59,9 @@ import Tab from 'primevue/tab';
 import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
 import UpcommingTrips from '../compositions/trajet/UpcommingTrips.vue';
+import NextTrip from '../compositions/trajet/NextTrip.vue';
 import DefaultContainer from '../components/DefaultContainer.vue';
 import { mockTrajets } from '../data/mokeTravels';
-
 const trajets = ref<Trajet[]>(mockTrajets);
 </script>
 
