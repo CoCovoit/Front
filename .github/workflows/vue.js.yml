@@ -1,0 +1,47 @@
+# GitHub actions to build and test the vue js project
+name: Vue Build and Test
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: '18'
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Build project
+              run: npm run build
+
+            - name: Run tests
+              run: npm test -- --watch=false --ci --reporters=default --reporters=jest-junit --testTimeout=10000 --forceExit=true --detectOpenHandles=true --maxWorkers=2 --testPathIgnorePatterns=__tests__/e2e/ --collectCoverageFrom='src/**/*.{js,jsx,ts,tsx}' --coverageDirectory=coverage --coverageReporters=text-lcov | coveralls
+    
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: '18'
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Run ESLint
+              run: npm run lint -- --max-warnings=0 --quiet --fix --ignore-path .gitignore --ext .js,.jsx,.ts,.tsx --cache --cache-location .eslintcache --cache-strategy content --report-unused-disable-directives --no-inline-config --resolve-plugins-relative-to ./.eslintrc.js --format=stylish --output-file=eslint-report.json
