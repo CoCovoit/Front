@@ -24,27 +24,25 @@ export interface Trajet {
 
 export const mockTrajets: Trajet[] = [
   {
-    id: 1,
-    depart: "Lyon",
-    arrivee: "Paris",
-    date: "2024-04-01",
-    heure: "08:00",
-    places: 4,
-    placesDisponibles: 2,
-    prix: 35,
+    id: '1',
+    date: new Date('2024-04-01'),
+    adresseDepart: 'Lyon',
+    adresseArrivee: 'Paris',
+    heureDebut: new Date('2024-04-01T08:00:00'),
+    heureFin: new Date('2024-04-01T14:00:00'),
     conducteur: {
       id: 1,
-      nom: "Dupont",
-      prenom: "Jean",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jean",
+      nom: 'Dupont',
+      prenom: 'Jean',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jean',
       note: 4.5
     },
-    statut: "à venir",
-    voiture: {
-      marque: "Peugeot",
-      modele: "308",
-      couleur: "Grise"
-    }
+    passagers: [],
+    nombreDePassagersMax: 4,
+    vehicule: 'Peugeot 308',
+    kilometrage: 450,
+    tempsDeTrajet: 360,
+    commentaire: 'Trajet direct sur autoroute'
   },
   {
     id: 2,
