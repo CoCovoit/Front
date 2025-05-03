@@ -14,8 +14,8 @@
                             <Tab value="1">Historique des trajets</Tab>
                             <Tab value="2">Trajets recommandés</Tab>
                         </TabList>
-                        <TabPanels>
-                            <TabPanel value="0">
+                        <TabPanels class="p-0">
+                            <TabPanel value="0" class="p-1">
                                 <p class="m-0">
                                     <UpcommingTrips :trajets="trajets" />
                                 </p>
