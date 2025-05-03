@@ -1,27 +1,27 @@
 <template>
-    <div class="trajet-card-container">
-        <div v-for="trajet in trajets" :key="trajet.id">
-            <div class="trajet-card">
-                <div class="trajet-card-left">
-                    <span class="trajet-card-date">{{ getRelativeDate(trajet.date) }} à {{ trajet.heure }}</span>
-                    <span class="trajet-card-depart-arrivee">{{ trajet.depart }} → {{ trajet.arrivee }}</span>
-                    <span class="trajet-card-places"> - {{ trajet.placesDisponibles }} / {{ trajet.places }}</span>
-                </div>
-                <div class="trajet-card-right">
-                    <Button class="trajet-card-button" label="Détails" />
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="trajet-card-container">
+		<div v-for="trajet in trajets" :key="trajet.id">
+			<div class="trajet-card">
+				<div class="trajet-card-left">
+					<span class="trajet-card-date">{{ getRelativeDate(trajet.date) }} à {{ trajet.heure }}</span>
+					<span class="trajet-card-depart-arrivee">{{ trajet.depart }} → {{ trajet.arrivee }}</span>
+					<span class="trajet-card-places"> - {{ trajet.placesDisponibles }} / {{ trajet.places }}</span>
+				</div>
+				<div class="trajet-card-right">
+					<Button class="trajet-card-button" label="Détails"/>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
-import { Trajet } from './index';
+import {Trajet} from './index';
 import Button from 'primevue/button';
-import { getRelativeDate } from '@/utils/dateUtils';
+import {getRelativeDate} from '@/utils/dateUtils';
 
 defineProps<{
-    trajets: Trajet[];
+	trajets: Trajet[];
 }>();
 
 
@@ -29,75 +29,82 @@ defineProps<{
 
 <style scoped lang="scss">
 .trajet-card-container {
-    margin: 16px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    max-height: 500px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #CBD5E1 #F1F5F9;
+	margin: 16px 0;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	max-height: 500px;
+	overflow-y: auto;
+	scrollbar-width: thin;
+	scrollbar-color: #CBD5E1 #F1F5F9;
 
-    .trajet-card {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px;
-        border-radius: 10px;
-        padding: 17px;
-        border: 1px solid #CBD5E1;
-    }
+	.trajet-card {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding:  16px ;
+		border-radius: 10px;
+		border: 1px solid #CBD5E1;
+		transition: ease-in-out 0.2s;
 
-    .trajet-card-left {
-        display: flex;
-        // align-items: center;
-        flex-direction: column;
 
-        .trajet-card-date {
-            font-size: 14px;
-            font-weight: 400;
-            color: #64748B;
-        }
+		&:hover {
+			transition: ease-in-out 0.2s;
+			box-shadow: 0 0px 4px rgba(16, 185, 129, 0.25);
+			border: 1px solid #10B981;
+		}
+	}
 
-        .trajet-card-depart-arrivee {
-            font-size: 16px;
-            font-weight: 500;
-            color: #000;
-        }
+	.trajet-card-left {
+		display: flex;
+		// align-items: center;
+		flex-direction: column;
 
-        .trajet-card-places {
-            font-size: 14px;
-            font-weight: 400;
-            color: #64748B;
-        }
-    }
+		.trajet-card-date {
+			font-size: 14px;
+			font-weight: 400;
+			color: #64748B;
+		}
 
-    .trajet-card-right {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+		.trajet-card-depart-arrivee {
+			font-size: 16px;
+			font-weight: 500;
+			color: #000;
+		}
 
-        .trajet-card-button {
-            border: 1px solid #CBD5E1;
-            background-color: transparent;
-            color: #000;
-            border-radius: 6px;
-            padding: 9px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.2s ease-in-out;
+		.trajet-card-places {
+			font-size: 14px;
+			font-weight: 400;
+			color: #64748B;
+		}
+	}
 
-            &:hover {
-                background-color: #CBD5E1;
-                transform: translateY(-2px);
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
+	.trajet-card-right {
+		display: flex;
+		align-items: center;
+		gap: 10px;
 
-            &:active {
-                transform: translateY(0);
-                box-shadow: none;
-            }
-        }
-    }
+		.trajet-card-button {
+			border: 1px solid #CBD5E1;
+			background-color: transparent;
+			color: #000;
+			border-radius: 6px;
+			padding: 9px 16px;
+			font-size: 14px;
+			font-weight: 600;
+			transition: all 0.2s ease-in-out;
+
+			&:hover {
+				background-color: #CBD5E1;
+				transform: translateY(-2px);
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			}
+
+			&:active {
+				transform: translateY(0);
+				box-shadow: none;
+			}
+		}
+	}
 }
 </style>
