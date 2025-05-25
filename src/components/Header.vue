@@ -15,9 +15,9 @@
 
 			<!-- Menu principal -->
 			<nav class="menu">
-				<RouterLink to="/"        class="menu-link" active-class="active">Accueil</RouterLink>
-				<RouterLink to="/Rechercher un trajet" class="menu-link" active-class="active">Trajets</RouterLink>
-				<RouterLink to="/chiffres clés"  class="menu-link" active-class="active">Profil</RouterLink>
+				<RouterLink to="/"        class="menu-link" exact-active-class="active">Accueil</RouterLink>
+				<RouterLink to="/rechercher-un-trajet" class="menu-link" exact-active-class="active">Rechercher un trajet</RouterLink>
+				<RouterLink to="/chiffres-cles"  class="menu-link" exact-active-class="active">Chiffres clés</RouterLink>
 			</nav>
 		</div>
 
@@ -76,9 +76,9 @@ defineProps<{
 	position: relative;
 	transition: color .2s;
 }
-.menu-link:hover { color: #4285F4; }
+.menu-link:hover { color: #10B981; }
 .menu-link.active {
-	color: #4285F4;
+	color: #10B981;
 }
 /* Petit soulignement animé (optionnel) */
 .menu-link::after {
