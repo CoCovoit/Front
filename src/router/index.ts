@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import App from '../App.vue'
 import MainLayout from '../components/MainLayout.vue'
 import Dashboard from '../Pages/Dashboard.vue'
 import Login from '../Pages/Login.vue'
+import SearchTrip from "@/Pages/SearchTrip.vue";
+import KeyNumber from "@/Pages/KeyNumber.vue";
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -17,6 +18,16 @@ const routes: RouteRecordRaw[] = [
         path: '/login',
         name: 'login',
         component: Login
+      },
+      {
+        path: '/rechercher-un-trajet',
+        name: 'Rechercher un trajet',
+        component: SearchTrip
+      },
+      {
+        path: '/chiffres-cles',
+        name: 'chiffres clés',
+        component: KeyNumber
       }
     ]
   }
