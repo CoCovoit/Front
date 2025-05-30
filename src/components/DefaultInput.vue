@@ -47,7 +47,7 @@ interface Props {
 	/** ID HTML (auto-généré si omis) */
 	id?: string;
 	/** Props supplémentaires passées au composant interne */
-	inputProps?: Record<string, any>;
+	inputProps?: Record<string, unknown>;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -56,12 +56,15 @@ const props = withDefaults(defineProps<Props>(), {
 	inputProps: () => ({})
 });
 
-const emit = defineEmits<{ 'update:modelValue': [any] }>();
+// Signature correcte : on indique que "update:modelValue" émet une valeur string | Date | null
+const emit = defineEmits<{
+	(e: 'update:modelValue', value: string | Date | null): void
+}>();
 
 /* ------------------------------------------------------------------ */
 /*  v-model proxy                                                     */
 /* ------------------------------------------------------------------ */
-const innerValue = computed({
+const innerValue = computed<string | Date | null>({
 	get: () => props.modelValue,
 	set: (val) => emit('update:modelValue', val)
 });
@@ -69,12 +72,14 @@ const innerValue = computed({
 /* ------------------------------------------------------------------ */
 /*  Choix du composant et réglages par type                           */
 /* ------------------------------------------------------------------ */
-const innerComponent = computed(() =>
-		props.type === 'text' ? InputText : DatePicker
+const innerComponent = computed(
+		() => props.type === 'text' ? InputText : DatePicker
 );
 
-const innerProps = computed<Record<string, any>>(() => {
-	const extra = props.inputProps;
+// On utilise Record<string, unknown> plutôt que any,
+// pour conserver l'objet libre mais non typé en détail
+const innerProps = computed<Record<string, unknown>>(() => {
+	const extra = props.inputProps ?? {};
 	switch (props.type) {
 		case 'date':
 			return { dateFormat: 'dd/mm/yy', ...extra };
@@ -90,11 +95,10 @@ const innerProps = computed<Record<string, any>>(() => {
 /* ------------------------------------------------------------------ */
 /*  ID unique si non fourni                                           */
 /* ------------------------------------------------------------------ */
-const computedId = computed(() =>
-		props.id ||
-		props.label.toLowerCase().replace(/\s+/g, '-') +
-		'-' +
-		Math.random().toString(36).slice(2, 7)
+const computedId = computed<string>(() =>
+		props.id
+				? props.id
+				: `${props.label.toLowerCase().replace(/\s+/g, '-')}-${Math.random().toString(36).slice(2, 7)}`
 );
 </script>
 
