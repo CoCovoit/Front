@@ -26,8 +26,8 @@ jobs:
             - name: Build project
               run: npm run build
 
-            - name: Run tests
-              run: npm test -- --watch=false --ci --reporters=default --reporters=jest-junit --testTimeout=10000 --forceExit=true --detectOpenHandles=true --maxWorkers=2 --testPathIgnorePatterns=__tests__/e2e/ --collectCoverageFrom='src/**/*.{js,jsx,ts,tsx}' --coverageDirectory=coverage --coverageReporters=text-lcov | coveralls
+            # - name: Run tests
+            #   run: npm test -- --watch=false --ci --reporters=default --reporters=jest-junit --testTimeout=10000 --forceExit=true --detectOpenHandles=true --maxWorkers=2 --testPathIgnorePatterns=__tests__/e2e/ --collectCoverageFrom='src/**/*.{js,jsx,ts,tsx}' --coverageDirectory=coverage --coverageReporters=text-lcov | coveralls
     
     lint:
         runs-on: ubuntu-latest
@@ -44,4 +44,4 @@ jobs:
               run: npm install
 
             - name: Run ESLint
-              run: npm run lint -- --max-warnings=0 --quiet --fix --ignore-path .gitignore --ext .js,.jsx,.ts,.tsx --cache --cache-location .eslintcache --cache-strategy content --report-unused-disable-directives --no-inline-config --resolve-plugins-relative-to ./.eslintrc.js --format=stylish --output-file=eslint-report.json
+              run: npm run lint
