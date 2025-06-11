@@ -4,6 +4,13 @@ import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
   plugins: [vue()],
+  optimizeDeps: {
+    include: [
+      'leaflet',
+      'leaflet-routing-machine',
+      'leaflet-control-geocoder'
+    ]
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

@@ -10,6 +10,16 @@ import './style.css'
 
 import App from './App.vue'
 
+
+// Leaflet core + CSS
+import 'leaflet/dist/leaflet.css';
+
+// Routing Machine + CSS
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+
+// Control Geocoder + CSS
+import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
+
 const app: VueApp = createApp(App)
 const pinia = createPinia()
 
