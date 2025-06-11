@@ -1,8 +1,8 @@
 <template>
   <Button class="custom-button">
     <template #default>
-      <i class="pi pi-plus mr-3"></i>
-      <span>Créer un trajet</span>
+      <i :class=icon></i>
+      <span>{{label}}</span>
     </template>
   </Button>
 </template>
