@@ -43,6 +43,7 @@
             </DefaultContainer>
             <DefaultContainer title="Notifications">
                 <div class="content">
+                  <Notification title="Je suis un test" icon="pi pi-spin pi-cog" description="je suis une superbe description aze  sd aze  qsd azaz daz dazdazd azdjazdj aoizqdjoqjsdizahj iazh dazhdoiqahdoiazdhoiazd azoid oiaz doiazdju oaizdjiazodjaodiaz oi dioad ioazd jaoizd oaizdio aoid oiqsdoiaz oidazoid azd j" type="info"></Notification>
                     <p>Vous n'avez pas de trajets</p>
                 </div>
             </DefaultContainer>
@@ -62,6 +63,7 @@ import UpcommingTrips from '../compositions/trajet/UpcommingTrips.vue';
 import NextTrip from '../compositions/trajet/NextTrip.vue';
 import DefaultContainer from '../components/DefaultContainer.vue';
 import { mockTrajets } from '../data/mokeTravels';
+import Notification from "@/compositions/notification/Notification.vue";
 const trajets = ref<Trajet[]>(mockTrajets);
 </script>
 
