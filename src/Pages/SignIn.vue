@@ -19,6 +19,40 @@
 
       <form @submit.prevent="handleSubmit">
         <div class="input-group">
+          <span>Prénom</span>
+          <DefaultInput
+              v-model="firstName"
+              label="Prénom"
+              icon="pi pi-user"
+              id="firstName"
+              :inputProps="{
+              placeholder: 'Votre prénom',
+              class: { 'p-invalid': submitted && !firstName }
+            }"
+          />
+          <small v-if="submitted && !firstName" class="p-error">
+            Le prénom est requis.
+          </small>
+        </div>
+
+        <div class="input-group">
+          <span>Nom</span>
+          <DefaultInput
+              v-model="lastName"
+              label="Nom"
+              icon="pi pi-user"
+              id="lastName"
+              :inputProps="{
+              placeholder: 'Votre nom',
+              class: { 'p-invalid': submitted && !lastName }
+            }"
+          />
+          <small v-if="submitted && !lastName" class="p-error">
+            Le nom est requis.
+          </small>
+        </div>
+
+        <div class="input-group">
           <span>Adresse mail</span>
           <DefaultInput
               v-model="email"
@@ -91,6 +125,8 @@ import { ref } from 'vue'
 import MainButton from '@/components/MainButton.vue'
 import DefaultInput from '@/components/DefaultInput.vue'
 
+const firstName = ref('')
+const lastName = ref('')
 const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
@@ -101,7 +137,7 @@ const handleSubmit = async () => {
   submitted.value = true
 
   // Validation de base
-  if (!email.value || !password.value || !confirmPassword.value) {
+  if (!firstName.value || !lastName.value || !email.value || !password.value || !confirmPassword.value) {
     return
   }
 
@@ -114,6 +150,8 @@ const handleSubmit = async () => {
     loading.value = true
     // TODO: Implémenter la logique d'inscription
     console.log('Inscription attempt:', {
+      firstName: firstName.value,
+      lastName: lastName.value,
       email: email.value,
       password: password.value,
     })
@@ -135,13 +173,11 @@ const handleSubmit = async () => {
 
   .card {
     width: 57.8rem;
-    height: 52.9rem;
     max-width: 600px;
     margin: auto;
     padding: 6rem 5rem;
     border-radius: 28px;
     box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.10), 0px 24px 36px 0px rgba(0, 0, 0, 0.04);
-    max-height: 580px;
     display: flex;
     flex-direction: column;
     justify-content: center;
