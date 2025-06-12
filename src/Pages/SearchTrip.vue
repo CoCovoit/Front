@@ -51,11 +51,16 @@
 
   <MapComponent
       theme="light"
+      :start="{ lat:48.8566, lng:2.3522 }"
+      :end="{ lat:48.8606, lng:2.3376 }"
       :points-of-interest="[
     { id:'1', position:{lat:48.86,lng:2.35}, iconUrl:'https://i.pravatar.cc/100?img=5', popupText:'Point 1' },
     { id:'2', position:{lat:48.85,lng:2.36}, iconUrl:'https://i.pravatar.cc/100?img=8', popupText:'Point 2' }
   ]"
+      @update:start="start = $event"
+      @update:end="end     = $event"
   />
+
 </template>
 
 <script setup lang="ts">
