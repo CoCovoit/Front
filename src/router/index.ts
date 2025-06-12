@@ -2,6 +2,7 @@ import {createRouter, createWebHistory, type RouteRecordRaw} from 'vue-router'
 import MainLayout from '../components/MainLayout.vue'
 import Dashboard from '../Pages/Dashboard.vue'
 import Login from '../Pages/Login.vue'
+import SignIn from '../Pages/SignIn.vue'
 import SearchTrip from "@/Pages/SearchTrip.vue";
 import KeyNumber from "@/Pages/KeyNumber.vue";
 
@@ -31,6 +32,11 @@ const routes: RouteRecordRaw[] = [
         path: '/login',
         name: 'login',
         component: Login
+    },
+    {
+        path: '/SignIn',
+        name: 'SignIn',
+        component: SignIn
     },
 
 ]
