@@ -1,8 +1,6 @@
 <template>
   <div class="page-container">
-
     <div class="card">
-
       <h1 class="logo">
         <span style="color:#4285F4">C</span>
         <span style="color:#EA4335">o</span>
@@ -16,26 +14,22 @@
 
       <div class="subtitles">
         <h2 class="subtitle">Bienvenu sur CoCoVoit</h2>
-
-        <p class="sub-subtitle">Connectez vous</p>
+        <p class="sub-subtitle">Inscrivez vous</p>
       </div>
-
 
       <form @submit.prevent="handleSubmit">
         <div class="input-group">
           <span>Adresse mail</span>
-
           <DefaultInput
               v-model="email"
               label="Adresse email"
               icon="pi pi-envelope"
               id="email"
               :inputProps="{
-          type: 'email',
-          placeholder: 'exemple@email.com',
-          class: { 'p-invalid': submitted && !email }
-        }"
-
+              type: 'email',
+              placeholder: 'exemple@email.com',
+              class: { 'p-invalid': submitted && !email }
+            }"
           />
           <small v-if="submitted && !email" class="p-error">
             L'email est requis.
@@ -51,19 +45,34 @@
               icon="pi pi-lock"
               id="password"
               :inputProps="{
-          placeholder: 'Votre mot de passe',
-          class: { 'p-invalid': submitted && !password }
-        }"
+              placeholder: 'Votre mot de passe',
+              class: { 'p-invalid': submitted && !password }
+            }"
           />
           <small v-if="submitted && !password" class="p-error">
             Le mot de passe est requis.
           </small>
         </div>
 
-        <div class="forget-password">
-          <a href="#" class="text-primary hover:underline">
-            Mot de passe oublié ?
-          </a>
+        <div class="input-group">
+          <span>Confirmez le mot de passe</span>
+          <DefaultInput
+              v-model="confirmPassword"
+              type="password"
+              label="Confirmation du mot de passe"
+              icon="pi pi-lock"
+              id="confirmPassword"
+              :inputProps="{
+              placeholder: 'Confirmez votre mot de passe',
+              class: { 'p-invalid': submitted && (!confirmPassword || confirmPassword !== password) }
+            }"
+          />
+          <small v-if="submitted && !confirmPassword" class="p-error">
+            La confirmation du mot de passe est requise.
+          </small>
+          <small v-else-if="submitted && confirmPassword !== password" class="p-error">
+            Les mots de passe ne correspondent pas.
+          </small>
         </div>
 
         <main-button
@@ -74,38 +83,42 @@
         />
       </form>
     </div>
-
-
   </div>
-
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
-import MainButton from "@/components/MainButton.vue";
-import DefaultInput from "@/components/DefaultInput.vue";
+import { ref } from 'vue'
+import MainButton from '@/components/MainButton.vue'
+import DefaultInput from '@/components/DefaultInput.vue'
 
 const email = ref('')
 const password = ref('')
+const confirmPassword = ref('')
 const submitted = ref(false)
 const loading = ref(false)
 
 const handleSubmit = async () => {
   submitted.value = true
 
-  if (!email.value || !password.value) {
+  // Validation de base
+  if (!email.value || !password.value || !confirmPassword.value) {
+    return
+  }
+
+  // Vérification de la correspondance des mots de passe
+  if (password.value !== confirmPassword.value) {
     return
   }
 
   try {
     loading.value = true
-    // TODO: Implémenter la logique de connexion
-    console.log('Login attempt:', {
+    // TODO: Implémenter la logique d'inscription
+    console.log('Inscription attempt:', {
       email: email.value,
       password: password.value,
     })
   } catch (error) {
-    console.error('Login error:', error)
+    console.error('Inscription error:', error)
   } finally {
     loading.value = false
   }
@@ -113,14 +126,12 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped lang="scss">
-
 .page-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
   background-color: #F9FAFB;
   padding: 32px;
-
 
   .card {
     width: 57.8rem;
@@ -190,15 +201,7 @@ const handleSubmit = async () => {
           line-height: normal;
         }
       }
-      .forget-password {
-        color: #10B981;
-        text-align: right;
-        font-size: 1.2rem;
-        font-style: normal;
-        font-weight: 500;
-        line-height: normal;
-      }
-      .p-error{
+      .p-error {
         color: #EF4444;
         font-size: 1rem;
         font-style: normal;
@@ -206,10 +209,8 @@ const handleSubmit = async () => {
         line-height: normal;
       }
     }
-
   }
 }
-
 
 :deep(.p-password-input) {
   width: 100%;
@@ -219,5 +220,3 @@ const handleSubmit = async () => {
   width: 100%;
 }
 </style>
-
-
