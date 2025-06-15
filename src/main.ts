@@ -1,6 +1,7 @@
 import { createApp, type App as VueApp } from 'vue'
 import { createPinia } from 'pinia'
 import PrimeVue from 'primevue/config'
+import ToastService from 'primevue/toastservice';
 import router from './router/index'
 
 // PrimeVue styles
@@ -36,5 +37,6 @@ app.use(PrimeVue, {
       }
   }
 });
+app.use(ToastService);
 
 app.mount('#app') 
