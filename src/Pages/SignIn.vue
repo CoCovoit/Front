@@ -19,14 +19,14 @@
 
       <form @submit.prevent="handleSubmit">
         <div class="input-group">
-          <span>Prénom</span>
+          <span>Prénom et Nom</span>
           <DefaultInput
               v-model="firstName"
               label="Prénom"
               icon="pi pi-user"
               id="firstName"
               :inputProps="{
-              placeholder: 'Votre prénom',
+              placeholder: 'Votre prénom et votre nom',
               class: { 'p-invalid': submitted && !firstName }
             }"
           />
@@ -35,22 +35,22 @@
           </small>
         </div>
 
-        <div class="input-group">
-          <span>Nom</span>
-          <DefaultInput
-              v-model="lastName"
-              label="Nom"
-              icon="pi pi-user"
-              id="lastName"
-              :inputProps="{
-              placeholder: 'Votre nom',
-              class: { 'p-invalid': submitted && !lastName }
-            }"
-          />
-          <small v-if="submitted && !lastName" class="p-error">
-            Le nom est requis.
-          </small>
-        </div>
+<!--        <div class="input-group">-->
+<!--          <span>Nom</span>-->
+<!--          <DefaultInput-->
+<!--              v-model="lastName"-->
+<!--              label="Nom"-->
+<!--              icon="pi pi-user"-->
+<!--              id="lastName"-->
+<!--              :inputProps="{-->
+<!--              placeholder: 'Votre nom',-->
+<!--              class: { 'p-invalid': submitted && !lastName }-->
+<!--            }"-->
+<!--          />-->
+<!--          <small v-if="submitted && !lastName" class="p-error">-->
+<!--            Le nom est requis.-->
+<!--          </small>-->
+<!--        </div>-->
 
         <div class="input-group">
           <span>Adresse mail</span>

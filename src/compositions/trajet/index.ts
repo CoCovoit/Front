@@ -20,7 +20,7 @@ export interface Trajet {
 }
 
 export interface TrajetWithCoordonneesRequestDTO {
-    condtucteurId:  string;
+    condtucteurId: string;
     dateHeure: Date;
     nombrePlaces: number;
     AdresseDepart?: string;
@@ -60,7 +60,7 @@ async function createTrajets(
 ): Promise<TrajetResponseDTO[]> {
     const response = await fetch(`${urlApi}/Trajets/batch`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(payload),
     });
     if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
@@ -75,7 +75,7 @@ async function createTrajetByCoordonnees(
 ): Promise<TrajetResponseDTO> {
     const response = await fetch(`${urlApi}/Trajets/Coordonnees`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(payload),
     });
     if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
@@ -100,7 +100,7 @@ async function getTrajetByProximite(
         `${urlApi}/Trajets/Proximite?${params.toString()}`,
         {
             method: 'GET',
-            headers: { 'Accept': 'application/json' },
+            headers: {'Accept': 'application/json'},
         }
     );
     if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
