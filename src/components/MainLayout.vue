@@ -2,9 +2,9 @@
 	<div class="mainLayout">
 		<Header :user="user"/>
 		<section class="page-container">
-			<router-view />
+			<router-view/>
 		</section>
-		<MobileNavBar />
+		<MobileNavBar/>
 	</div>
 </template>
 
@@ -22,22 +22,25 @@ const user = {
 .mainLayout {
 	display: flex;
 	flex-direction: column;
-	height: 100vh;            /* 1 écran */
+	height: 100vh; /* 1 écran */
 }
 
 /* la seule partie scrollable */
 .page-container {
-	flex: 1;                  /* prend tout l’espace restant */
-	overflow-y: auto;         /* permet au contenu de défiler */
+	flex: 1; /* prend tout l’espace restant */
+	overflow-y: auto; /* permet au contenu de défiler */
 	background-color: #F9FAFB;
 	padding: 32px;
-	margin-top: 65px;         /* pour ne pas passer sous le header desktop */
+	margin-top: 65px; /* pour ne pas passer sous le header desktop */
 }
 
 /* Votre media-query existante */
 @media (max-width: 768px) {
 	.page-container {
-		margin-top: 0;          /* plus de header desktop en mobile */
+		margin-top: 0; /* plus de header desktop en mobile */
+		margin-bottom: 60px;
+		padding: 16px 0; /* padding réduit pour mobile */
+
 	}
 }
 </style>

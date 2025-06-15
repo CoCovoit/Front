@@ -36,6 +36,11 @@ defineProps<{
         color: #000000;
     }
 }
+@media (max-width: 768px) {
+	.default-container {
+		padding: 16px 16px;
+	}
+}
 
 
 </style>

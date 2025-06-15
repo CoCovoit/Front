@@ -8,7 +8,7 @@
             </DefaultContainer>
             <DefaultContainer>
                 <div class="content">
-                    <Tabs value="0">
+                    <Tabs value="0" scrollable>
                         <TabList>
                             <Tab value="0">Trajet à venir</Tab>
                             <Tab value="1">Historique des trajets</Tab>
@@ -87,5 +87,27 @@ const trajets = ref<Trajet[]>(mockTrajets);
         gap: 32px;
         width: 40%;
     }
+}
+
+/* ===== Responsivité ===== */
+@media (max-width: 780px) {
+	.dashboard-page {
+		flex-direction: column;
+	}
+	.dashboard-page-left,
+	.dashboard-page-right {
+		width: 100% !important;
+		max-width: 100%;
+	}
+	.dashboard-page-right{
+		padding-bottom: 32px;
+	}
+}
+
+@media (max-width: 640px) {
+	/* Resserrez les marges/paddings sur mobile si besoin */
+	.dashboard-page {
+		gap: 16px;
+	}
 }
 </style>

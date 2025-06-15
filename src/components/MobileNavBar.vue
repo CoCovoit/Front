@@ -30,7 +30,6 @@ import { RouterLink } from 'vue-router';
 
 <style scoped lang="scss">
 .mobile-nav {
-	display: none;
 	position: fixed;
 	bottom: env(safe-area-inset-bottom, 0);
 	left: 0;
