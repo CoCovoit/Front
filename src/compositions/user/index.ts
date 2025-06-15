@@ -1,4 +1,5 @@
 import {Localisation} from "@/compositions/localisation";
+import {TrajetResponseDTO} from "@/compositions/trajet";
 
 export interface User {
     id: string;
@@ -37,7 +38,6 @@ const urlApi = import.meta.env.VITE_API_ENDPOINT;
 async function createUser(
     payload: UserRequestDTO
 ): Promise<UserResponseDTO> {
-    const urlApi = import.meta.env.VITE_API_ENDPOINT;
     try {
         const response = await fetch(`${urlApi}/Utilisateurs`, {
             method: 'POST',
@@ -59,7 +59,6 @@ async function createUser(
 }
 
 async function getUsers(): Promise<UserResponseDTO[]> {
-    const urlApi = import.meta.env.VITE_API_ENDPOINT;
     try {
         const response = await fetch(`${urlApi}/Utilisateurs`, {
             method: 'GET',
@@ -77,9 +76,30 @@ async function getUsers(): Promise<UserResponseDTO[]> {
     }
 }
 
+async function getUserTrajets(
+    idUser: number
+): Promise<TrajetResponseDTO[]> {
+    try {
+        const response = await fetch(`${urlApi}/Utilisateurs/${idUser}/Trajets`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            },
+        });
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP ${response.status}`);
+        }
+        return (await response.json()) as TrajetResponseDTO[];
+    } catch (error) {
+        console.error('Erreur lors de la récupération des utilisateurs', error);
+        throw error;
+    }
+}
+
 export function useUser(){
     return{
         createUser,
-        getUsers
+        getUsers,
+        getUserTrajets
     }
 }
