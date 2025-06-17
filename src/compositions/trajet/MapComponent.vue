@@ -162,8 +162,8 @@ function onToSelect(selected: string) {
 // 4) POI avatars
 function addPOI(poi: POI) {
   const icon = L.divIcon({
-    className: 'poi-div-icon',
-    html: `<img src="${poi.iconUrl}" class="poi-avatar"/>`,
+    className: 'poi-avatar',
+    html:  `<img src="${poi.iconUrl}" alt="POI icon" style="   width: 40px;   height: 40px;   border-radius: 50%;   object-fit: cover;   display: block;"/>`,
     iconSize:   [40,40],
     iconAnchor: [20,40]
   });
