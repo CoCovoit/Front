@@ -35,20 +35,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
 import { RouterLink } from 'vue-router';
 import MainButton from './MainButton.vue';
 import Avatar from 'primevue/avatar';
+import {useIsMobile} from "@/utils/useIsMobile.ts";
 
 const props = defineProps<{ user: { name: string; avatar: string } }>();
 
-// Réactivité sur la taille d'écran
-const isMobile = ref(window.innerWidth <= 768);
-const onResize = () => {
-	isMobile.value = window.innerWidth <= 768;
-};
-onMounted(() => window.addEventListener('resize', onResize));
-onUnmounted(() => window.removeEventListener('resize', onResize));
+const { isMobile } = useIsMobile()
+
 </script>
 
 <style scoped lang="scss">
