@@ -1,12 +1,12 @@
 <template>
 	<div>
 		<div class="next-trip-container">
-			<div class="next-trip-left"></div>
+			<div v-if="!isMobile" class="next-trip-left"></div>
 			<div class="next-trip-middle">
-				<span class="next-trip-middle-date">{{ getRelativeDate(trajet.date) }} à {{ trajet.heureDebut
-					}} {{ console.log(trajet) }}</span>
+				<span class="next-trip-middle-date">{{ getRelativeDate(trajet.dateHeure) }} à {{ formatTime(trajet.dateHeure)
+					}} {{ console.log('trajet', trajet) }}</span>
 				<span class="next-trip-middle-depart-arrivee">{{ trajet.adresseDepart }} → {{ trajet.adresseArrivee }}</span>
-				<span class="next-trip-middle-places"> - {{ trajet.passagers.length }} / {{ trajet.nombreDePassagersMax
+				<span class="next-trip-middle-places"> -  / {{ trajet.nombrePlaces
 					}}</span>
 			</div>
 			<div class="next-trip-right">
@@ -20,8 +20,11 @@
 <script setup lang="ts">
 import {Trajet} from './index';
 import Button from 'primevue/button';
-import {getRelativeDate} from '@/utils/dateUtils';
+import {getRelativeDate, formatTime} from '@/utils/dateUtils';
 import {defineProps} from 'vue';
+import {useIsMobile} from "@/utils/useIsMobile.ts";
+
+const {isMobile} = useIsMobile()
 
 
 defineProps<{
@@ -123,6 +126,12 @@ defineProps<{
 @media (max-width: 768px) {
 	.next-trip-container {
 		padding: 0;
+		display: flex;
+		flex-direction: column;
+
+		.next-trip-right {
+			width: 100%;
+		}
 	}
 }
 
