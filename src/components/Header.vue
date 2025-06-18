@@ -16,18 +16,21 @@
 					</h1>
 					<nav class="menu">
 						<RouterLink to="/" class="menu-link" exact-active-class="active">Accueil</RouterLink>
-						<RouterLink to="/rechercher-un-trajet" class="menu-link" exact-active-class="active">Rechercher un trajet</RouterLink>
+						<RouterLink to="/rechercher-un-trajet" class="menu-link" exact-active-class="active">Rechercher un trajet
+						</RouterLink>
 						<RouterLink to="/chiffres-cles" class="menu-link" exact-active-class="active">Chiffres clés</RouterLink>
 					</nav>
 				</div>
 				<div class="right-side">
 					<RouterLink to="/creer-un-trajet">
-						<MainButton icon="pi pi-plus" label="Créer un trajet" />
+						<MainButton icon="pi pi-plus" label="Créer un trajet"/>
 					</RouterLink>
-					<div class="avatar-container">
-						<span class="text-sm">{{ user.name }}</span>
-						<Avatar shape="circle" size="xlarge" :image="user.avatar" />
-					</div>
+					<RouterLink to="/profil">
+						<div class="avatar-container">
+							<span class="text-sm">{{ user.name }}</span>
+							<Avatar shape="circle" size="xlarge" :image="user.avatar"/>
+						</div>
+					</RouterLink>
 				</div>
 			</section>
 		</transition>
@@ -35,14 +38,14 @@
 </template>
 
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
+import {RouterLink} from 'vue-router';
 import MainButton from './MainButton.vue';
 import Avatar from 'primevue/avatar';
 import {useIsMobile} from "@/utils/useIsMobile.ts";
 
 const props = defineProps<{ user: { name: string; avatar: string } }>();
 
-const { isMobile } = useIsMobile()
+const {isMobile} = useIsMobile()
 
 </script>
 
@@ -60,9 +63,11 @@ const { isMobile } = useIsMobile()
 	background: #fff;
 	height: 65px;
 	width: 100%;
-	box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
 	position: fixed;
-	top: 0; left: 0; right: 0;
+	top: 0;
+	left: 0;
+	right: 0;
 	z-index: 100;
 }
 
@@ -71,10 +76,12 @@ const { isMobile } = useIsMobile()
 	align-items: center;
 	gap: 48px;
 }
+
 .menu {
 	display: flex;
 	gap: 32px;
 }
+
 .menu-link {
 	font-weight: 500;
 	text-decoration: none;
@@ -82,18 +89,25 @@ const { isMobile } = useIsMobile()
 	position: relative;
 	transition: color .2s;
 }
+
 .menu-link:hover,
-.menu-link.active { color: #10B981; }
+.menu-link.active {
+	color: #10B981;
+}
+
 .menu-link::after {
 	content: "";
 	position: absolute;
-	left: 0; right: 0; bottom: -4px;
+	left: 0;
+	right: 0;
+	bottom: -4px;
 	height: 2px;
 	background: currentColor;
 	transform: scaleX(0);
 	transform-origin: left;
 	transition: transform .2s;
 }
+
 .menu-link:hover::after,
 .menu-link.active::after {
 	transform: scaleX(1);
@@ -103,6 +117,7 @@ const { isMobile } = useIsMobile()
 	display: flex;
 	align-items: center;
 	gap: 32px;
+
 	.avatar-container {
 		display: flex;
 		align-items: center;
@@ -115,11 +130,13 @@ const { isMobile } = useIsMobile()
 .slide-down-leave-active {
 	transition: transform .3s ease, opacity .3s ease;
 }
+
 .slide-down-enter-from,
 .slide-down-leave-to {
 	transform: translateY(-100%);
 	opacity: 0;
 }
+
 .slide-down-enter-to,
 .slide-down-leave-from {
 	transform: translateY(0);
@@ -130,11 +147,13 @@ const { isMobile } = useIsMobile()
 .slide-up-leave-active {
 	transition: transform .3s ease, opacity .3s ease;
 }
+
 .slide-up-enter-from,
 .slide-up-leave-to {
 	transform: translateY(100%);
 	opacity: 0;
 }
+
 .slide-up-enter-to,
 .slide-up-leave-from {
 	transform: translateY(0);

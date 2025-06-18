@@ -5,6 +5,7 @@ import Login from '../Pages/Login.vue'
 import SignIn from '../Pages/SignIn.vue'
 import SearchTrip from "@/Pages/SearchTrip.vue";
 import KeyNumber from "@/Pages/KeyNumber.vue";
+import Profile from "@/Pages/Profile.vue";
 
 const routes: RouteRecordRaw[] = [
     {
@@ -25,6 +26,11 @@ const routes: RouteRecordRaw[] = [
                 path: '/chiffres-cles',
                 name: 'chiffres clés',
                 component: KeyNumber
+            },
+            {
+                path: '/profil',
+                name: 'profil',
+                component: Profile
             }
         ]
     },
