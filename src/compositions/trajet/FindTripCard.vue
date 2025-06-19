@@ -163,4 +163,16 @@ const props = defineProps<{
 		}
 	}
 }
+
+@media (max-width: 768px) {
+	.find-trip-card {
+		.content {
+			padding: 8px 0;
+
+			.elements {
+				padding: 16px 8px;
+			}
+		}
+	}
+}
 </style>
