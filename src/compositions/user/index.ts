@@ -4,7 +4,7 @@ import {TrajetResponseDTO} from "@/compositions/trajet";
 export interface User {
     id: string;
     nom: string;
-    prenom: string;
+    prenom?: string;
     email?: string;
     avatar?: string;
     heureDebutPreferer?: Date;
@@ -19,6 +19,7 @@ export interface User {
     LocalisationId?: Localisation[];
 }
 
+
 export interface UserRequestDTO {
     nom?: string;
     localisationId: number;
@@ -31,6 +32,8 @@ export interface UserResponseDTO {
     email?: string;
     localisations: Localisation[];
 }
+
+
 
 const urlApi = import.meta.env.VITE_API_ENDPOINT;
 
