@@ -1,31 +1,31 @@
 <template>
   <div class="map-wrapper">
     <!-- Recherche hors carte -->
-    <div v-if="editable" class="search-container">
-      <AutoComplete
-          v-model="fromModel"
-          :suggestions="fromSuggestions"
-          placeholder="Départ"
-          :minLength="3"
-          :delay="300"
-          appendTo="body"
-          forceSelection
-          @complete="searchFrom"
-          @select="onFromSelect"
-      />
+<!--    <div v-if="editable" class="search-container">-->
+<!--      <AutoComplete-->
+<!--          v-model="fromModel"-->
+<!--          :suggestions="fromSuggestions"-->
+<!--          placeholder="Départ"-->
+<!--          :minLength="3"-->
+<!--          :delay="300"-->
+<!--          appendTo="body"-->
+<!--          forceSelection-->
+<!--          @complete="searchFrom"-->
+<!--          @select="onFromSelect"-->
+<!--      />-->
 
-      <AutoComplete
-          v-model="toModel"
-          :suggestions="toSuggestions"
-          placeholder="Arrivée"
-          :minLength="3"
-          :delay="300"
-          appendTo="body"
-          forceSelection
-          @complete="searchTo"
-          @select="onToSelect"
-      />
-    </div>
+<!--      <AutoComplete-->
+<!--          v-model="toModel"-->
+<!--          :suggestions="toSuggestions"-->
+<!--          placeholder="Arrivée"-->
+<!--          :minLength="3"-->
+<!--          :delay="300"-->
+<!--          appendTo="body"-->
+<!--          forceSelection-->
+<!--          @complete="searchTo"-->
+<!--          @select="onToSelect"-->
+<!--      />-->
+<!--    </div>-->
 
     <!-- La carte -->
     <div ref="mapContainer" class="map"></div>
