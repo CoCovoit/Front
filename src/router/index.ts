@@ -6,6 +6,7 @@ import SignIn from '../Pages/SignIn.vue'
 import SearchTrip from "@/Pages/SearchTrip.vue";
 import KeyNumber from "@/Pages/KeyNumber.vue";
 import Profile from "@/Pages/Profile.vue";
+import CreateTrip from "@/Pages/CreateTrip.vue";
 
 const routes: RouteRecordRaw[] = [
     {
@@ -21,6 +22,11 @@ const routes: RouteRecordRaw[] = [
                 path: '/rechercher-un-trajet',
                 name: 'Rechercher un trajet',
                 component: SearchTrip
+            },
+            {
+                path: '/creer-un-trajet',
+                name: 'Creer un trajet',
+                component: CreateTrip
             },
             {
                 path: '/chiffres-cles',
