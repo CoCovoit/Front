@@ -3,10 +3,11 @@
 		<div class="next-trip-container">
 			<div v-if="!isMobile" class="next-trip-left"></div>
 			<div class="next-trip-middle">
-				<span class="next-trip-middle-date">{{ getRelativeDate(trajet.dateHeure) }} à {{ formatTime(trajet.dateHeure)
-					}} {{ console.log('trajet', trajet) }}</span>
-				<span class="next-trip-middle-depart-arrivee">{{ trajet.adresseDepart }} → {{ trajet.adresseArrivee }}</span>
-				<span class="next-trip-middle-places"> -  / {{ trajet.nombrePlaces
+				<span class="next-trip-middle-date">{{ getRelativeDate(trajet[0].dateHeure)
+					}} à {{ formatTime(trajet[0].dateHeure) }} </span>
+				<span class="next-trip-middle-depart-arrivee">{{ trajet[0].localisationDepart.adresse
+					}} → {{ trajet[0].localisationArrivee.adresse }}</span>
+				<span class="next-trip-middle-places"> {{ role(trajet[0].role) }} -  / {{ trajet.nombrePlaces
 					}}</span>
 			</div>
 			<div class="next-trip-right">
@@ -18,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import {Trajet} from './index';
+import {TrajetResponseDTO} from './index';
 import Button from 'primevue/button';
 import {getRelativeDate, formatTime} from '@/utils/dateUtils';
 import {defineProps} from 'vue';
@@ -27,11 +28,20 @@ import {useIsMobile} from "@/utils/useIsMobile.ts";
 const {isMobile} = useIsMobile()
 
 
-defineProps<{
-	trajet: Trajet;
+const props = defineProps<{
+	trajet: TrajetResponseDTO;
 }>();
 
+console.log('NextTrips props.trajet', props.trajet);
 
+const role = (role: 'R' | 'C') => {
+	if (role === 'R') {
+		return 'Conducteur';
+	} else if (role === 'C') {
+		return 'Passager';
+	}
+	return '';
+}
 </script>
 
 <style scoped lang="scss">

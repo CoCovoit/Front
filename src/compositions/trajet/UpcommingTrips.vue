@@ -5,10 +5,10 @@
 				<div class="trajet-card-left">
 					<span class="trajet-card-date">{{ getRelativeDate(trajet.dateHeure) }} à {{ formatTime(trajet.dateHeure)
 						}}</span>
-					<span class="trajet-card-depart-arrivee">{{ trajet.depart }} → {{ trajet.arrivee }}</span>
-					<span class="trajet-card-places"> - {{ trajet.placesDisponibles }} / {{ trajet.places }}</span>
+					<span class="trajet-card-depart-arrivee">{{ trajet.localisationDepart.adresse }} → {{ trajet.localisationArrivee.adresse }}</span>
+					<span class="trajet-card-places">{{role(trajet.role)}} - {{ trajet.nombrePlaces }} / {{ trajet.nombrePlaces }}</span>
 				</div>
-				<div v-if="!isMobile" class="trajet-card-right">
+				<div v-if="!isMobile || isPastTrip" class="trajet-card-right">
 					<Button class="trajet-card-button" label="Détails" @click="handleShowDetails(trajet)"/>
 				</div>
 			</div>
@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import {Trajet} from './index';
+import {Trajet, TrajetResponseDTO} from './index';
 import Button from 'primevue/button';
 import {getRelativeDate, formatTime} from '@/utils/dateUtils';
 import {useIsMobile} from "@/utils/useIsMobile.ts";
@@ -26,12 +26,22 @@ import {useIsMobile} from "@/utils/useIsMobile.ts";
 const {isMobile} = useIsMobile()
 
 defineProps<{
-	trajets: Trajet[];
+	trajets: TrajetResponseDTO[];
+	isPastTrip : boolean;
 }>();
 
 // TODO: faire la logique de détails du trajet
 const handleShowDetails = (trajet: Trajet) => {
 	console.log('handleShowDetails trajet', trajet);
+}
+
+const role = (role : 'R' | 'C') => {
+	if (role === 'R') {
+		return 'Conducteur';
+	} else if (role === 'C') {
+		return 'Passager';
+	}
+	return '';
 }
 
 </script>
