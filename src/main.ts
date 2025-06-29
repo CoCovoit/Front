@@ -35,8 +35,14 @@ const keycloakConfig = {
     clientId: import.meta.env.VITE_KEYCLOAK_CLIENTID as string,
 };
 // Keycloak init options
+// const keycloakInitOptions = {
+//     flow: 'standard',        // default
+//     checkLoginIframe: false, // default disables periodic SSO checks
+//     onLoad: 'login-required'
+// };
 const keycloakInitOptions = {
     flow: 'standard',        // default
+    pkceMethod: 'S256',
     checkLoginIframe: false, // default disables periodic SSO checks
     onLoad: 'login-required'
 };
