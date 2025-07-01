@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref, computed} from 'vue';
+import {onMounted, ref, computed, watch} from 'vue';
 import {Trajet, useTrajet, TrajetResponseDTO} from '../compositions/trajet';
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist';
@@ -77,34 +77,79 @@ const allTrips = ref<TrajetResponseDTO[]>(mockTrajets)
 const now = ref(new Date())
 
 const currentUser = computed(() => userStore.currentUser)
+const currentUserTrajets = computed(() => userStore.currentUserTrajets)
 
 // currentUser.id = 1 // pour le mock, on force l'id à 1
 
 // au montage, fetch + parsing des dates
+
+watch(currentUserTrajets, (newCurrentUserTrajets) => {
+  console.log('newCurrentUserTrajets',newCurrentUserTrajets)
+
+  const test = newCurrentUserTrajets.filter(t => t.localisationArrivee.adresse === '')
+
+  const testAlltrips = newCurrentUserTrajets.map(t => ({ ...t, dateHeure: new Date(t.dateHeure) }))
+  const testpastTrips = newCurrentUserTrajets.filter(t => new Date(t.dateHeure).getTime() < Date.now())
+      .sort((a, b) =>
+          // on compare deux timestamps, du plus récent au plus ancien
+          new Date(b.dateHeure).getTime() - new Date(a.dateHeure).getTime()
+      )
+  const testupcomingTrips = newCurrentUserTrajets.filter(t => new Date(t.dateHeure).getTime() > Date.now())
+      .sort((a, b) =>
+          // on compare deux timestamps, du plus ancien au plus récent
+          new Date(a.dateHeure).getTime() - new Date(b.dateHeure).getTime()
+      )
+
+  console.log('test', test)
+  console.log('testAlltrips', testAlltrips)
+  console.log('testpastTrips', testpastTrips)
+  console.log('testupcomingTrips', testupcomingTrips)
+
+  allTrips.value = newCurrentUserTrajets
+
+})
+
 // onMounted(async () => {
-// 	await userStore.fetchUserByEmail()
+// 	// await userStore.fetchUserByEmail()
+//   console.log('currentUser', currentUser.value)
 //
-// 	await userStore.fetchUserTrajets(1)
-// 	allTrips.value = userStore
-// 			.getTrajets(1)
-// 			.map(t => ({ ...t, dateHeure: new Date(t.dateHeure) }))
+//
+// 	// await userStore.fetchUserTrajets(currentUser.value?.id)
+//
+//   console.log('currentUserTrajet',currentUserTrajets.value)
+//
+//   const test = currentUserTrajets.value.filter(t => t.role === 'C')
+//
+//   console.log('test', test)
+//
+//
+//   //
+// 	// allTrips.value = currentUserTrajets.value
+// 	// 		.map(t => ({ ...t, dateHeure: new Date(t.dateHeure) }))
 // })
 
 // filtres + tris
+
 const pastTrips = computed(() =>
-		allTrips.value
-				.filter(t => t.dateHeure < now.value)
-				.sort((a, b) => b.dateHeure.getTime() - a.dateHeure.getTime())
+    allTrips.value
+        .filter(t => new Date(t.dateHeure).getTime() < Date.now())
+        .sort((a, b) =>
+            // on compare deux timestamps, du plus récent au plus ancien
+            new Date(b.dateHeure).getTime() - new Date(a.dateHeure).getTime()
+        )
 )
 
 const upcomingTrips = computed(() =>
-		allTrips.value
-				.filter(t => t.dateHeure > now.value)
-				.sort((a, b) => a.dateHeure.getTime() - b.dateHeure.getTime())
+    allTrips.value
+        .filter(t => new Date(t.dateHeure).getTime() > Date.now())
+        .sort((a, b) =>
+            // on compare deux timestamps, du plus ancien au plus récent
+            new Date(a.dateHeure).getTime() - new Date(b.dateHeure).getTime()
+        )
 )
 
 const nextTrip = computed(() =>
-			upcomingTrips.value.length > 0 ? upcomingTrips.value[0] : null
+    upcomingTrips.value.length > 0 ? upcomingTrips.value[0] : null
 )
 
 // helpers pour l’affichage

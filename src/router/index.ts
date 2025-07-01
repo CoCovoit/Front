@@ -9,6 +9,9 @@ import Profile from "@/Pages/Profile.vue";
 import CreateTrip from "@/Pages/CreateTrip.vue";
 import {useKeycloak} from "@josempgon/vue-keycloak";
 import RhDashboard from "@/Pages/RhDashboard.vue";
+import {useUser} from "@/compositions/user";
+import {useUserStore} from "@/compositions/user/userStore.ts";
+import {parseJwt} from "@/utils/jwtUtils.ts";
 
 const routes: RouteRecordRaw[] = [
     {
@@ -107,8 +110,11 @@ const router = createRouter({
 //     // Tout est ok
 //     next();
 // });
+
 router.beforeEach((to, from, next) => {
     const { keycloak, isAuthenticated } = useKeycloak()
+    const userStore = useUserStore()
+
 
     console.log('keycloak',keycloak);
     console.log('keycloak.value?.authenticated',keycloak.value?.authenticated);
@@ -122,6 +128,11 @@ router.beforeEach((to, from, next) => {
     // authentification Keycloak terminée, on vérifie
     if (!isAuthenticated.value) {
         return next({ name: 'login' })
+    }
+
+    if (isAuthenticated ) {
+        const email = parseJwt(keycloak.value?.token).email
+        userStore.fetchUserAndTrajetByEmail(email)
     }
 
     // vérification des rôles éventuels…

@@ -30,7 +30,7 @@ export interface UserResponseDTO {
     id: number;
     nom?: string;
     email?: string;
-    localisations: Localisation[];
+    localisations: Localisation;
 }
 
 

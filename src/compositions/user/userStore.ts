@@ -7,7 +7,7 @@ interface userState {
     currentUser: UserResponseDTO | null
     loading: boolean
     error: string | null
-    currentUserTrajets: Record<number, TrajetResponseDTO[]>
+    currentUserTrajets: TrajetResponseDTO[]
 }
 
 
@@ -20,14 +20,14 @@ export const useUserStore = defineStore('user', {
         currentUser: null,
         loading: false,
         error: null,
-        currentUserTrajets: {}
+        currentUserTrajets: []
     }),
 
     getters: {
         /** Accès à la liste des utilisateurs */
-        currentUser: (state) => state.currentUser,
+        // currentUser: (state) => state.currentUser,
         /** Récupère les trajets d’un user par son id */
-        getTrajets: (state) => (userId: number) => state.currentUserTrajets[userId] ?? []
+        currentUserTrajetsList: (state) => state.currentUserTrajets
     },
 
     actions: {
@@ -47,21 +47,56 @@ export const useUserStore = defineStore('user', {
         /**
          * Récupère un utilisateur via son email
          */
-        async fetchUserByEmail() {
+        async fetchUserByEmail(userEmail:string) {
             this.loading = true
             this.error = null
             try {
                 // on récupère d’abord tous les users
+                console.log('fetchUserByEmail userEmail',userEmail)
                 const all = await getUsers()
-                const found = all.find(u => u.email === userEmail)
+                const found = all.find(u => u.email === userEmail) as UserResponseDTO | undefined
+                console.log('fetchUserByEmail found',found)
                 if (!found) {
                     throw new Error(`Aucun utilisateur trouvé pour l’email : ${userEmail}`)
                 }
                 this.currentUser = found
+
+                console.log('fetchUserByEmail currentUser', this.currentUser)
             } catch (err: any) {
                 this.error = err.message || `Erreur lors de la recherche de l’utilisateur ${userEmail}`
                 this.currentUser = null
             } finally {
+                this.loading = false
+            }
+        },
+
+        async fetchUserAndTrajetByEmail(userEmail: string) {
+            this.loading = true
+            this.error   = null
+
+            try {
+                // 1. Récupère tous les users et trouve celui par email
+                const all   = await getUsers()
+                const found = all.find(u => u.email === userEmail) as UserResponseDTO | undefined
+
+                if (!found) {
+                    throw new Error(`Aucun utilisateur trouvé pour l’email : ${userEmail}`)
+                }
+
+                // 2. On stocke l’utilisateur
+                this.currentUser = found
+
+                // 3. On récupère ses trajets et on remplace le tableau
+                const trajets = await getUserTrajets(found.id)
+                this.currentUserTrajets = trajets
+            }
+            catch (err: any) {
+                // En cas d’erreur (user ou trajets), on réinitialise
+                this.error               = err.message
+                this.currentUser         = null
+                this.currentUserTrajets  = []
+            }
+            finally {
                 this.loading = false
             }
         },
