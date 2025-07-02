@@ -3,7 +3,7 @@
 		<div class="dashboard-page-left">
 			<DefaultContainer title="Mon prochain trajet réservé">
 				<div class="content">
-					<NextTrip :trajet="upcomingTrips"/>
+					<NextTrip :trajet="upcomingTrips[0]"/>
 				</div>
 			</DefaultContainer>
 			<DefaultContainer>
@@ -27,7 +27,7 @@
 							</TabPanel>
 							<TabPanel value="2">
 								<p class="m-0">
-									At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+									Cette partie est en cours de développement, elle sera bientôt disponible.
 								</p>
 							</TabPanel>
 						</TabPanels>
@@ -72,7 +72,8 @@ import {useUserStore} from "@/compositions/user/userStore.ts";
 
 const userStore = useUserStore()
 
-const allTrips = ref<TrajetResponseDTO[]>(mockTrajets)
+// const allTrips = ref<TrajetResponseDTO[]>(mockTrajets)
+const allTrips = ref<TrajetResponseDTO[]>([])
 
 const now = ref(new Date())
 

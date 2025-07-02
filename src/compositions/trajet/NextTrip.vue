@@ -2,12 +2,12 @@
 	<div>
 		<div class="next-trip-container">
 			<div v-if="!isMobile" class="next-trip-left"></div>
-			<div class="next-trip-middle">
-				<span class="next-trip-middle-date">{{ getRelativeDate(trajet[0].dateHeure)
-					}} à {{ formatTime(trajet[0].dateHeure) }} </span>
-				<span class="next-trip-middle-depart-arrivee">{{ trajet[0].localisationDepart.adresse
-					}} → {{ trajet[0].localisationArrivee.adresse }}</span>
-				<span class="next-trip-middle-places"> {{ role(trajet[0].role) }} -  / {{ trajet.nombrePlaces
+			<div v-if="trajet !== undefined" class="next-trip-middle">
+				<span class="next-trip-middle-date">{{ getRelativeDate(trajet.dateHeure)
+					}} à {{ formatTime(trajet.dateHeure) }} </span>
+				<span class="next-trip-middle-depart-arrivee">{{ trajet.localisationDepart.adresse
+					}} → {{ trajet.localisationArrivee.adresse }}</span>
+				<span class="next-trip-middle-places"> {{ role(trajet.role) }} -  / {{ trajet.nombrePlaces
 					}}</span>
 			</div>
 			<div class="next-trip-right">
@@ -29,7 +29,7 @@ const {isMobile} = useIsMobile()
 
 
 const props = defineProps<{
-	trajet: TrajetResponseDTO;
+	trajet?: TrajetResponseDTO;
 }>();
 
 console.log('NextTrips props.trajet', props.trajet);
