@@ -1,44 +1,16 @@
 <template>
   <div class="map-wrapper">
-    <!-- Recherche hors carte -->
-<!--    <div v-if="editable" class="search-container">-->
-<!--      <AutoComplete-->
-<!--          v-model="fromModel"-->
-<!--          :suggestions="fromSuggestions"-->
-<!--          placeholder="Départ"-->
-<!--          :minLength="3"-->
-<!--          :delay="300"-->
-<!--          appendTo="body"-->
-<!--          forceSelection-->
-<!--          @complete="searchFrom"-->
-<!--          @select="onFromSelect"-->
-<!--      />-->
-
-<!--      <AutoComplete-->
-<!--          v-model="toModel"-->
-<!--          :suggestions="toSuggestions"-->
-<!--          placeholder="Arrivée"-->
-<!--          :minLength="3"-->
-<!--          :delay="300"-->
-<!--          appendTo="body"-->
-<!--          forceSelection-->
-<!--          @complete="searchTo"-->
-<!--          @select="onToSelect"-->
-<!--      />-->
-<!--    </div>-->
-
-    <!-- La carte -->
     <div ref="mapContainer" class="map"></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch, withDefaults, defineProps, defineEmits } from 'vue';
-import AutoComplete from 'primevue/autocomplete';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import {Localisation, useLocalisation} from "@/compositions/localisation";
 
 interface LatLng { lat: number; lng: number; }
 interface POI {
@@ -82,10 +54,10 @@ const props = withDefaults(defineProps<{
 });
 
 // Emits
-const emit = defineEmits<{
-  (e: 'update:start', val: LatLng): void;
-  (e: 'update:end',   val: LatLng): void;
-}>();
+// const emit = defineEmits<{
+//   (e: 'update:start', val: LatLng): void;
+//   (e: 'update:end',   val: LatLng): void;
+// }>();
 
 // Leaflet references
 const mapContainer = ref<HTMLDivElement>();
@@ -94,54 +66,54 @@ let tileLayer:      L.TileLayer;
 let routingControl: L.Routing.Control;
 let poiLayer:       L.LayerGroup;
 
-// Autocomplete state
-const fromModel       = ref<string|null>(null);
-const toModel         = ref<string|null>(null);
-const fromSuggestions = ref<string[]>([]);
-const toSuggestions   = ref<string[]>([]);
-const rawFromResults  = ref<Suggestion[]>([]);
-const rawToResults    = ref<Suggestion[]>([]);
-
-// 1) Fetch & remap Nominatim
-async function fetchPlaces(q: string): Promise<Suggestion[]> {
-  const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&q=${encodeURIComponent(q)}`;
-  const res = await fetch(url);
-  const data = res.ok ? await res.json() as NominatimItem[] : [];
-  return data.map(item => {
-    const addr = item.address || {};
-    const num      = addr.house_number || '';
-    const road     = addr.road || addr.pedestrian || addr.footway || '';
-    const city     = addr.city || addr.town || addr.village || addr.county || '';
-    const postcode = addr.postcode || '';
-    const street   = [num, road].filter(Boolean).join(' ');
-    const display_name = [street, city, postcode].filter(Boolean).join(', ');
-    return { ...item, display_name };
-  });
-}
-
-// 2) Autocomplete handlers
-function searchFrom(e: { query: string }) {
-  if (e.query.length < 3) {
-    fromSuggestions.value = [];
-    rawFromResults.value = [];
-    return;
-  }
-  fetchPlaces(e.query).then(data => {
-    rawFromResults.value = data;
-    fromSuggestions.value = data.map(p => p.display_name);
-  });
-}
-function searchTo(e: { query: string }) {
-  if (e.query.length < 3) {
-    toSuggestions.value = [];
-    rawToResults.value = [];
-    return;
-  }
-  fetchPlaces(e.query).then(data => {
-    rawToResults.value = data;
-    toSuggestions.value = data.map(p => p.display_name);
-  });
-}
+// // Autocomplete state
+// const fromModel       = ref<string|null>(null);
+// const toModel         = ref<string|null>(null);
+// const fromSuggestions = ref<string[]>([]);
+// const toSuggestions   = ref<string[]>([]);
+// const rawFromResults  = ref<Suggestion[]>([]);
+// const rawToResults    = ref<Suggestion[]>([]);
+//
+// // 1) Fetch & remap Nominatim
+// async function fetchPlaces(q: string): Promise<Suggestion[]> {
+//   const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&q=${encodeURIComponent(q)}`;
+//   const res = await fetch(url);
+//   const data = res.ok ? await res.json() as NominatimItem[] : [];
+//   return data.map(item => {
+//     const addr = item.address || {};
+//     const num      = addr.house_number || '';
+//     const road     = addr.road || addr.pedestrian || addr.footway || '';
+//     const city     = addr.city || addr.town || addr.village || addr.county || '';
+//     const postcode = addr.postcode || '';
+//     const street   = [num, road].filter(Boolean).join(' ');
+//     const display_name = [street, city, postcode].filter(Boolean).join(', ');
+//     return { ...item, display_name };
+//   });
+// }
+//
+// // 2) Autocomplete handlers
+// function searchFrom(e: { query: string }) {
+//   if (e.query.length < 3) {
+//     fromSuggestions.value = [];
+//     rawFromResults.value = [];
+//     return;
+//   }
+//   fetchPlaces(e.query).then(data => {
+//     rawFromResults.value = data;
+//     fromSuggestions.value = data.map(p => p.display_name);
+//   });
+// }
+// function searchTo(e: { query: string }) {
+//   if (e.query.length < 3) {
+//     toSuggestions.value = [];
+//     rawToResults.value = [];
+//     return;
+//   }
+//   fetchPlaces(e.query).then(data => {
+//     rawToResults.value = data;
+//     toSuggestions.value = data.map(p => p.display_name);
+//   });
+// }
 
 // 3) On select: update waypoints & emit
 function onFromSelect(selected: string) {
@@ -180,8 +152,18 @@ function updateWaypoints(start?: LatLng, end?: LatLng) {
   routingControl.setWaypoints(wps);
 }
 
+import Localisation from "../localisation/index.ts"
+
+const useLocalisation = useLocalisation()
+
+const allLocalisation = ref<Localisation[]>([])
+
 // 6) Init map
 onMounted(() => {
+
+  allLocalisation.value = await useLocalisation.getAllLocalisation()
+
+  // TODO: mettre la localisation par défault de la personne connectée
   map = L.map(mapContainer.value!, { zoomControl:false, attributionControl:false })
       .setView([48.8566,2.3522],13);
   L.control.zoom({ position:'bottomright' }).addTo(map);

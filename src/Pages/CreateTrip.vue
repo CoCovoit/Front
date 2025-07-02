@@ -105,10 +105,10 @@ interface FormState {
 const {isMobile} = useIsMobile();
 
 // Carte
-const start = ref({lat: 48.8566, lng: 2.3522});
-const end = ref({lat: 48.8606, lng: 2.3376});
+const start = ref({lat: 45.762278, lng: 4.84827});
+const end = ref({lat: 45.7564657, lng: 4.8683961});
 const pointsOfInterest = [
-	{id: '1', position: {lat: 48.86, lng: 2.35}, iconUrl: 'https://i.pravatar.cc/100?img=5', popupText: 'Point 1'},
+	{id: '1', position: {lat: 45.746620178222656, lng: 4.868138790130615}, iconUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQJ5EzZ4u8Bmib0W8EY4j17OBObaJVvJV5HA&s', popupText: 'Science U'},
 	{id: '2', position: {lat: 48.85, lng: 2.36}, iconUrl: 'https://i.pravatar.cc/100?img=8', popupText: 'Point 2'}
 ];
 
