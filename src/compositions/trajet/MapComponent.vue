@@ -5,12 +5,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch, withDefaults, defineProps, defineEmits } from 'vue';
+import {ref, onMounted, onBeforeUnmount, watch, withDefaults, defineProps, defineEmits, computed} from 'vue';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
-import {Localisation, useLocalisation} from "@/compositions/localisation";
+import {Localisation, useLocalisation} from "../localisation/index.ts";
+import {useUserStore} from "@/compositions/user/userStore.ts";
 
 interface LatLng { lat: number; lng: number; }
 interface POI {
@@ -53,6 +54,14 @@ const props = withDefaults(defineProps<{
   editable: true
 });
 
+watch(() => props.start, (newStart) => {
+	// if (newStart) {
+		console.log('Start point updated:', newStart);
+	// }
+});
+
+console.log('Mapcomponent props',props)
+
 // Emits
 // const emit = defineEmits<{
 //   (e: 'update:start', val: LatLng): void;
@@ -66,70 +75,21 @@ let tileLayer:      L.TileLayer;
 let routingControl: L.Routing.Control;
 let poiLayer:       L.LayerGroup;
 
-// // Autocomplete state
-// const fromModel       = ref<string|null>(null);
-// const toModel         = ref<string|null>(null);
-// const fromSuggestions = ref<string[]>([]);
-// const toSuggestions   = ref<string[]>([]);
-// const rawFromResults  = ref<Suggestion[]>([]);
-// const rawToResults    = ref<Suggestion[]>([]);
-//
-// // 1) Fetch & remap Nominatim
-// async function fetchPlaces(q: string): Promise<Suggestion[]> {
-//   const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&q=${encodeURIComponent(q)}`;
-//   const res = await fetch(url);
-//   const data = res.ok ? await res.json() as NominatimItem[] : [];
-//   return data.map(item => {
-//     const addr = item.address || {};
-//     const num      = addr.house_number || '';
-//     const road     = addr.road || addr.pedestrian || addr.footway || '';
-//     const city     = addr.city || addr.town || addr.village || addr.county || '';
-//     const postcode = addr.postcode || '';
-//     const street   = [num, road].filter(Boolean).join(' ');
-//     const display_name = [street, city, postcode].filter(Boolean).join(', ');
-//     return { ...item, display_name };
-//   });
-// }
-//
-// // 2) Autocomplete handlers
-// function searchFrom(e: { query: string }) {
-//   if (e.query.length < 3) {
-//     fromSuggestions.value = [];
-//     rawFromResults.value = [];
-//     return;
-//   }
-//   fetchPlaces(e.query).then(data => {
-//     rawFromResults.value = data;
-//     fromSuggestions.value = data.map(p => p.display_name);
-//   });
-// }
-// function searchTo(e: { query: string }) {
-//   if (e.query.length < 3) {
-//     toSuggestions.value = [];
-//     rawToResults.value = [];
-//     return;
-//   }
-//   fetchPlaces(e.query).then(data => {
-//     rawToResults.value = data;
-//     toSuggestions.value = data.map(p => p.display_name);
-//   });
-// }
-
 // 3) On select: update waypoints & emit
-function onFromSelect(selected: string) {
-  const item = rawFromResults.value.find(p => p.display_name === selected);
-  if (!item) return;
-  const coord = { lat: +item.lat, lng: +item.lon };
-  updateWaypoints(coord, props.end);
-  emit('update:start', coord);
-}
-function onToSelect(selected: string) {
-  const item = rawToResults.value.find(p => p.display_name === selected);
-  if (!item) return;
-  const coord = { lat: +item.lat, lng: +item.lon };
-  updateWaypoints(props.start, coord);
-  emit('update:end', coord);
-}
+// function onFromSelect(selected: string) {
+//   const item = rawFromResults.value.find(p => p.display_name === selected);
+//   if (!item) return;
+//   const coord = { lat: +item.lat, lng: +item.lon };
+//   updateWaypoints(coord, props.end);
+//   emit('update:start', coord);
+// }
+// function onToSelect(selected: string) {
+//   const item = rawToResults.value.find(p => p.display_name === selected);
+//   if (!item) return;
+//   const coord = { lat: +item.lat, lng: +item.lon };
+//   updateWaypoints(props.start, coord);
+//   emit('update:end', coord);
+// }
 
 // 4) POI avatars
 function addPOI(poi: POI) {
@@ -152,21 +112,41 @@ function updateWaypoints(start?: LatLng, end?: LatLng) {
   routingControl.setWaypoints(wps);
 }
 
-import Localisation from "../localisation/index.ts"
-
-const useLocalisation = useLocalisation()
+const {getLocalisations} = useLocalisation()
 
 const allLocalisation = ref<Localisation[]>([])
 
-// 6) Init map
-onMounted(() => {
+const userStore = useUserStore()
 
-  allLocalisation.value = await useLocalisation.getAllLocalisation()
+const currentUser = computed(() => userStore.currentUser)
+
+
+// 6) Init map
+onMounted(async () => {
+
+  // allLocalisation.value = await getLocalisations()
+
+	console.log('currentUser.value?.localisation',currentUser.value?.localisation.latitude)
+	console.log('currentUser.value?.localisation',currentUser.value?.localisation.longitude)
 
   // TODO: mettre la localisation par défault de la personne connectée
-  map = L.map(mapContainer.value!, { zoomControl:false, attributionControl:false })
-      .setView([48.8566,2.3522],13);
-  L.control.zoom({ position:'bottomright' }).addTo(map);
+	// const initial = props.start ?? {
+	// 	lat: currentUser.value?.localisation.latitude ?? 0,
+	// 	lng: currentUser.value?.localisation.longitude ?? 0
+	// };
+	// const initial =  {
+	// 	lat: 45.7566177381623,
+	// 	lng: 4.868364463341703
+	// };
+	console.log('props.start.lat',props.start.lat)
+	console.log('props.start.lng',props.start.lng)
+
+	const initial =  {
+		lat: props.start?.lat,
+		lng:props.start?.lng
+	};
+	map = L.map(mapContainer.value!, { zoomControl:false, attributionControl:false })
+			.setView([ initial.lat, initial.lng ], 13);
 
   const urls = {
     light: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
@@ -182,15 +162,18 @@ onMounted(() => {
 
   // Routing Machine with custom markers
   const initWps: L.LatLng[] = [];
-  if (props.start) initWps.push(L.latLng(props.start.lat, props.start.lng));
-  if (props.end)   initWps.push(L.latLng(props.end.lat,   props.end.lng));
+  // if (props.start) initWps.push(L.latLng(props.start.lat, props.start.lng));
+  // if (props.end)   initWps.push(L.latLng(props.end.lat,   props.end.lng));
+  initWps.push(L.latLng(45.7566177381623, 4.868364463341703));
+  initWps.push(L.latLng( 45.758007,4.832016));
 
   routingControl = L.Routing.control({
     waypoints:           initWps,
     lineOptions:         { styles:[{ color:'#007bff', weight:4 }] },
     show:                false,
     addWaypoints:        false,
-    draggableWaypoints:  props.editable,
+		fitSelectedRoutes:   false,
+		draggableWaypoints:  props.editable,
     routeWhileDragging:  props.editable,
     createMarker(i, wp, nWps) {
       const marker = L.marker(wp.latLng, {
@@ -204,8 +187,8 @@ onMounted(() => {
             i2===i ? L.latLng(pos.lat,pos.lng) : w.latLng
         );
         routingControl.setWaypoints(pts);
-        if (i===0) emit('update:start', {lat:pos.lat,lng:pos.lng});
-        if (i===1) emit('update:end',   {lat:pos.lat,lng:pos.lng});
+        // if (i===0) emit('update:start', {lat:pos.lat,lng:pos.lng});
+        // if (i===1) emit('update:end',   {lat:pos.lat,lng:pos.lng});
       });
       return marker;
     }
@@ -213,8 +196,8 @@ onMounted(() => {
 
   routingControl.on('waypointschanged', () => {
     const wps = routingControl.getWaypoints();
-    if (wps[0]) emit('update:start', { lat:wps[0].latLng.lat, lng:wps[0].latLng.lng });
-    if (wps[1]) emit('update:end',   { lat:wps[1].latLng.lat, lng:wps[1].latLng.lng });
+    // if (wps[0]) emit('update:start', { lat:wps[0].latLng.lat, lng:wps[0].latLng.lng });
+    // if (wps[1]) emit('update:end',   { lat:wps[1].latLng.lat, lng:wps[1].latLng.lng });
   });
 });
 
@@ -234,6 +217,8 @@ watch(() => props.pointsOfInterest, list => {
 }, { deep:true });
 watch(() => props.start, s => { if (s) updateWaypoints(s, props.end); });
 watch(() => props.end,   e => { if (e) updateWaypoints(props.start, e); });
+
+
 </script>
 
 <style scoped>

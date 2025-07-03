@@ -119,7 +119,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, reactive, onMounted} from 'vue';
+import {ref, reactive, onMounted, watch} from 'vue';
 import DefaultInput from '@/components/DefaultInput.vue';
 import AutoComplete from 'primevue/autocomplete';
 import Button from 'primevue/button';
@@ -128,14 +128,9 @@ import {useIsMobile} from "@/utils/useIsMobile.ts";
 import {Localisation, useLocalisation} from "@/compositions/localisation";
 import {Select} from "primevue";
 
-interface Location {
-	id: number;
-	name: string;
-}
-
 interface FormState {
-	localisationDepart: Location | null;
-	localisationArrivee: Location | null;
+	localisationDepart: Localisation | null;
+	localisationArrivee: Localisation | null;
 	dateHeure: Date | null;
 	nombrePlaces: number | null;
 }
@@ -150,6 +145,7 @@ const pointsOfInterest = [
 	{id: '1', position: {lat: 45.746620178222656, lng: 4.868138790130615}, iconUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQJ5EzZ4u8Bmib0W8EY4j17OBObaJVvJV5HA&s', popupText: 'Science U'},
 	{id: '2', position: {lat: 48.85, lng: 2.36}, iconUrl: 'https://i.pravatar.cc/100?img=8', popupText: 'Point 2'}
 ];
+
 
 
 // const conducteurId = store.state.user.id as number;
@@ -175,6 +171,38 @@ onMounted(async ()=>{
 
 })
 
+// Watcher sur la sélection du départ
+watch(
+		() => form.localisationDepart,
+		(loc) => {
+			console.log('form.localisationDepart', loc);
+
+			if (loc) {
+				// ajustez ici les noms de propriétés en fonction de votre type Localisation
+				start.value = {
+					lat: loc.latitude,
+					lng: loc.longitude,
+				};
+			}
+		},
+		{ immediate: false } // si vous voulez initialiser dès le montage : true
+);
+
+// Watcher sur la sélection de l’arrivée
+watch(
+		() => form.localisationArrivee,
+		(loc) => {
+			console.log('form.localisationDepart', loc);
+
+			if (loc) {
+				end.value = {
+					lat: loc.latitude,
+					lng: loc.longitude,
+				};
+			}
+		},
+		{ immediate: false }
+);
 const searchLocations = async (event: { query: string }) => {
 	try {
 		const res = await fetch(`/api/locations?search=${encodeURIComponent(event.query)}`);
@@ -185,6 +213,7 @@ const searchLocations = async (event: { query: string }) => {
 		suggestions.value = [];
 	}
 };
+
 
 const validate = (): boolean => {
 	errors.localisationDepart = form.localisationDepart ? '' : 'Veuillez sélectionner une localisation de départ.';
@@ -197,15 +226,15 @@ const validate = (): boolean => {
 	return Object.values(errors).every(msg => !msg);
 };
 
-const emit = defineEmits<{
-	(e: 'create', payload: {
-		// conducteurId: number;
-		localisationDepartId: number;
-		localisationArriveeId: number;
-		dateHeure: string;
-		nombrePlaces: number;
-	}): void;
-}>();
+// const emit = defineEmits<{
+// 	(e: 'create', payload: {
+// 		// conducteurId: number;
+// 		localisationDepartId: number;
+// 		localisationArriveeId: number;
+// 		dateHeure: string;
+// 		nombrePlaces: number;
+// 	}): void;
+// }>();
 
 const onSubmit = () => {
 
@@ -224,7 +253,7 @@ const onSubmit = () => {
 	};
 	console.log('payload', payload)
 
-	emit('create', payload);
+	// emit('create', payload);
 };
 </script>
 
