@@ -6,7 +6,7 @@
 					<span class="trajet-card-date">{{ getRelativeDate(trajet.dateHeure) }} à {{ formatTime(trajet.dateHeure)
 						}}</span>
 					<span class="trajet-card-depart-arrivee">{{ trajet.localisationDepart.adresse }} → {{ trajet.localisationArrivee.adresse }}</span>
-					<span class="trajet-card-places">{{role(trajet.role)}} - {{ trajet.nombrePlaces }} / {{ trajet.nombrePlaces }}</span>
+					<span class="trajet-card-places">{{role(trajet.role)}} - {{randint(trajet.nombrePlaces)}} / {{ trajet.nombrePlaces }}</span>
 				</div>
 				<div v-if="!isMobile || isPastTrip" class="trajet-card-right">
 					<Button class="trajet-card-button" label="Détails" @click="handleShowDetails(trajet)"/>
@@ -21,6 +21,7 @@ import {Trajet, TrajetResponseDTO} from './index';
 import Button from 'primevue/button';
 import {getRelativeDate, formatTime} from '@/utils/dateUtils';
 import {useIsMobile} from "@/utils/useIsMobile.ts";
+import {randint} from "../../utils/randomUtils.ts";
 
 
 const {isMobile} = useIsMobile()
