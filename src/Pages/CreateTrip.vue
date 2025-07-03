@@ -119,14 +119,16 @@
 </template>
 
 <script setup lang="ts">
-import {ref, reactive, onMounted, watch} from 'vue';
+import {ref, reactive, onMounted, watch, computed} from 'vue';
 import DefaultInput from '@/components/DefaultInput.vue';
-import AutoComplete from 'primevue/autocomplete';
 import Button from 'primevue/button';
 import MapComponent from "@/compositions/trajet/MapComponent.vue";
 import {useIsMobile} from "@/utils/useIsMobile.ts";
 import {Localisation, useLocalisation} from "@/compositions/localisation";
 import {Select} from "primevue";
+import {useUserStore} from "@/compositions/user/userStore.ts";
+import {TrajetRequestDTO} from "@/compositions/trajet";
+import { useToast } from 'primevue/usetoast';
 
 interface FormState {
 	localisationDepart: Localisation | null;
@@ -147,6 +149,7 @@ const pointsOfInterest = [
 ];
 
 
+const toast = useToast()
 
 // const conducteurId = store.state.user.id as number;
 
@@ -164,6 +167,12 @@ const errors = reactive<Partial<Record<keyof FormState, string>>>({});
 const allLocalisation = ref<Localisation[]>([]);
 
 const {getLocalisations} = useLocalisation();
+
+const userStore = useUserStore()
+
+const currentUser = computed(() => userStore.currentUser)
+
+
 
 onMounted(async ()=>{
 
@@ -236,7 +245,7 @@ const validate = (): boolean => {
 // 	}): void;
 // }>();
 
-const onSubmit = () => {
+const onSubmit = async () => {
 
 	console.log('onSubmit form', form);
 
@@ -244,16 +253,30 @@ const onSubmit = () => {
 		return;
 	}
 	// Construction de l'objet final
-	const payload = {
-		// conducteurId,
+	const payload : TrajetRequestDTO = {
+		conducteurId : currentUser.value.id,
 		localisationDepartId: form.localisationDepart!.id,
 		localisationArriveeId: form.localisationArrivee!.id,
 		dateHeure: form.dateHeure!.toISOString(),
-		nombrePlaces: form.nombrePlaces!,
+		nombrePlaces: parseInt(form.nombrePlaces!),
 	};
 	console.log('payload', payload)
-
-	// emit('create', payload);
+	try {
+		const newTrajet = await userStore.createUserTrajet(payload)
+		toast.add({
+			severity: 'success',
+			summary: 'Trajet créé',
+			detail: `De ${newTrajet.localisationDepart.adresse} vers ${newTrajet.localisationArrivee.adresse} .`,
+			life: 3000
+		})
+	} catch (err: any) {
+		toast.add({
+			severity: 'error',
+			summary: 'Erreur',
+			detail: err.message,
+			life: 5000
+		})
+	}
 };
 </script>
 

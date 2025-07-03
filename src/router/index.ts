@@ -9,7 +9,6 @@ import Profile from "@/Pages/Profile.vue";
 import CreateTrip from "@/Pages/CreateTrip.vue";
 import {useKeycloak} from "@josempgon/vue-keycloak";
 import RhDashboard from "@/Pages/RhDashboard.vue";
-import {useUser} from "@/compositions/user";
 import {useUserStore} from "@/compositions/user/userStore.ts";
 import {parseJwt} from "@/utils/jwtUtils.ts";
 

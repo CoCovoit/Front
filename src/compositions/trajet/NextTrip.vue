@@ -7,7 +7,7 @@
 					}} à {{ formatTime(trajet.dateHeure) }} </span>
 				<span class="next-trip-middle-depart-arrivee">{{ trajet.localisationDepart.adresse
 					}} → {{ trajet.localisationArrivee.adresse }}</span>
-				<span class="next-trip-middle-places"> {{ role(trajet.role) }} -  / {{ trajet.nombrePlaces
+				<span class="next-trip-middle-places"> {{ role(trajet.role) }} - {{randint(trajet.nombrePlaces)}} / {{ trajet.nombrePlaces
 					}}</span>
 			</div>
 			<div class="next-trip-right">
@@ -24,6 +24,7 @@ import Button from 'primevue/button';
 import {getRelativeDate, formatTime} from '@/utils/dateUtils';
 import {defineProps} from 'vue';
 import {useIsMobile} from "@/utils/useIsMobile.ts";
+import {randint} from "../../utils/randomUtils.ts";
 
 const {isMobile} = useIsMobile()
 

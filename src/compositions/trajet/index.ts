@@ -32,10 +32,10 @@ export interface TrajetWithCoordonneesRequestDTO {
 }
 
 export interface TrajetRequestDTO {
-    conducteurId: string;
+    conducteurId: number;
     localisationDepartId: number;
     localisationArriveeId: number;
-    dateHeure: Date;
+    dateHeure: string;
     nombrePlaces: number;
 }
 
@@ -57,15 +57,15 @@ const urlApi = import.meta.env.VITE_API_ENDPOINT;
  * Crée plusieurs trajets en une seule requête.
  */
 async function createTrajets(
-    payload: TrajetRequestDTO[]
-): Promise<TrajetResponseDTO[]> {
-    const response = await fetch(`${urlApi}/Trajets/batch`, {
+    payload: TrajetRequestDTO
+): Promise<TrajetResponseDTO> {
+    const response = await fetch(`${urlApi}/Trajets`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(payload),
     });
     if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
-    return (await response.json()) as TrajetResponseDTO[];
+    return (await response.json()) as TrajetResponseDTO;
 }
 
 /**

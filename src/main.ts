@@ -1,11 +1,13 @@
-import { createApp, type App as VueApp } from 'vue'
-import { createPinia } from 'pinia'
+import {createApp, type App as VueApp} from 'vue'
+import {createPinia} from 'pinia'
 import PrimeVue from 'primevue/config'
 import ToastService from 'primevue/toastservice';
+import Toast from 'primevue/toast'
+
 import router from './router/index'
 
 // Keycloak plugin for Vue
-import { vueKeycloak } from '@josempgon/vue-keycloak';
+import {vueKeycloak} from '@josempgon/vue-keycloak';
 
 // PrimeVue styles
 import Aura from '@primevue/themes/aura'
@@ -24,10 +26,6 @@ import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 // Control Geocoder + CSS
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
 
-// const app: VueApp = createApp(App)
-// const pinia = createPinia()
-//
-// app.use(pinia)
 // Keycloak configuration from env
 const keycloakConfig = {
     url: import.meta.env.VITE_KEYCLOAK_URL as string,
@@ -40,41 +38,38 @@ const keycloakInitOptions = {
     checkLoginIframe: false, // default disables periodic SSO checks
     onLoad: 'login-required'
 };
-// Install Keycloak plugin before router
-// app.use(vueKeycloak, { config: keycloakConfig, initOptions: keycloakInitOptions });
-// app.use(PrimeVue, {
-//   // Default theme configuration
-//   theme: {
-//       preset: Aura,
-//       options: {
-//           prefix: 'p',
-//           darkModeSelector: 'white',
-//           cssLayer: false
-//       }
-//   }
-// });
-// app.use(ToastService);
-// app.use(router)
-//
-// app.mount('#app')
 
 
 const initApp = async () => {
     const app = createApp(App)
 
-    // vos plugins non-dépendants de Keycloak
-    app.use(createPinia())
+    // 1️⃣ Pinia de base
+    const pinia = createPinia()
+    app.use(pinia)
+
+    // 2️⃣ PrimeVue + thème
     app.use(PrimeVue, {
-        theme: { preset: Aura, options: { prefix: 'p', darkModeSelector: 'white', cssLayer: false } }
+        theme: {
+            preset: Aura,
+            options: { prefix: 'p', darkModeSelector: 'white', cssLayer: false }
+        }
     })
+
+    // 3️⃣ ToastService (doit venir APRÈS PrimeVue)
     app.use(ToastService)
+    app.component('Toast', Toast)
 
-    // ⚠️ on attend ici que Keycloak soit prêt
-    await vueKeycloak.install(app, { config: keycloakConfig, initOptions: keycloakInitOptions })  // :contentReference[oaicite:0]{index=0}
 
-    // puis seulement on monte le router
+    // 5️⃣ Keycloak (on attend qu’il soit prêt)
+    await vueKeycloak.install(app, {
+        config: keycloakConfig,
+        initOptions: keycloakInitOptions
+    })
+
+    // 6️⃣ Router et montage final
     app.use(router)
     app.mount('#app')
 }
+
 
 initApp()
