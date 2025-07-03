@@ -5,32 +5,69 @@
 				<!-- Localisation de départ -->
 				<div class="field">
 					<label for="depart">Localisation de départ</label>
-					<AutoComplete
-							id="depart"
-							v-model="form.localisationDepart"
-							:suggestions="suggestions"
-							field="name"
-							dropdown
-							@complete="searchLocations"
-							placeholder="Rechercher..."
-							class="p-inputtext"
-					/>
+<!--					<AutoComplete-->
+<!--							id="depart"-->
+<!--							v-model="form.localisationDepart"-->
+<!--							:suggestions="suggestions"-->
+<!--							field="name"-->
+<!--							dropdown-->
+<!--							@complete="searchLocations"-->
+<!--							placeholder="Rechercher..."-->
+<!--							class="p-inputtext"-->
+<!--					/>-->
+					<Select v-model="form.localisationDepart" :options="allLocalisation" filter optionLabel="adresse" placeholder="Choisissez une adresse de départ" class="p-inputtext">
+						<template #value="slotProps">
+							<div v-if="slotProps.value" class="flex items-center">
+								<div>{{ slotProps.value.adresse }}</div>
+							</div>
+							<span v-else>
+            {{ slotProps.placeholder }}
+        </span>
+						</template>
+						<template #option="slotProps">
+							<div class="flex items-center">
+								<div>{{ slotProps.option.adresse }}</div>
+							</div>
+						</template>
+					</Select>
 					<small v-if="errors.localisationDepart" class="p-error">{{ errors.localisationDepart }}</small>
 				</div>
 
 				<!-- Localisation d'arrivée -->
 				<div class="field">
 					<label for="arrivee">Localisation d'arrivée</label>
-					<AutoComplete
-							id="arrivee"
-							v-model="form.localisationArrivee"
-							:suggestions="suggestions"
-							field="name"
-							dropdown
-							@complete="searchLocations"
-							placeholder="Rechercher..."
-							class="p-inputtext"
-					/>
+<!--					<Select filter v-model="form.localisationArrivee" placeholder="Choisissez une adresse d'arrivée"-->
+<!--					        :options="suggestions" optionLabel="name" optionValue="id" class="p-inputtext"-->
+<!--					/>-->
+					{{ console.log('allLocalisation',allLocalisation) }}
+					<Select v-model="form.localisationArrivee" :options="allLocalisation" filter optionLabel="adresse" placeholder="Choisissez une adresse d'arrivée" class="p-inputtext">
+						<template #value="slotProps">
+							<div v-if="slotProps.value" class="flex items-center">
+								<div>{{ slotProps.value.adresse }}</div>
+							</div>
+							<span v-else>
+            {{ slotProps.placeholder }}
+        </span>
+						</template>
+						<template #option="slotProps">
+							<div class="flex items-center">
+								<div>{{ slotProps.option.adresse }}</div>
+							</div>
+						</template>
+					</Select>
+
+					<!--
+
+							<AutoComplete-->
+<!--							id="arrivee"-->
+<!--							v-model="form.localisationArrivee"-->
+<!--							:suggestions="suggestions"-->
+<!--							field="name"-->
+<!--							dropdown-->
+<!--							@complete="searchLocations"-->
+<!--							placeholder="Rechercher..."-->
+<!--							class="p-inputtext"-->
+<!--					/>-->
 					<small v-if="errors.localisationArrivee" class="p-error">{{ errors.localisationArrivee }}</small>
 				</div>
 
@@ -82,12 +119,14 @@
 </template>
 
 <script setup lang="ts">
-import {ref, reactive} from 'vue';
+import {ref, reactive, onMounted} from 'vue';
 import DefaultInput from '@/components/DefaultInput.vue';
 import AutoComplete from 'primevue/autocomplete';
 import Button from 'primevue/button';
 import MapComponent from "@/compositions/trajet/MapComponent.vue";
 import {useIsMobile} from "@/utils/useIsMobile.ts";
+import {Localisation, useLocalisation} from "@/compositions/localisation";
+import {Select} from "primevue";
 
 interface Location {
 	id: number;
@@ -126,6 +165,16 @@ const suggestions = ref<Location[]>([]);
 
 const errors = reactive<Partial<Record<keyof FormState, string>>>({});
 
+const allLocalisation = ref<Localisation[]>([]);
+
+const {getLocalisations} = useLocalisation();
+
+onMounted(async ()=>{
+
+	allLocalisation.value = await getLocalisations();
+
+})
+
 const searchLocations = async (event: { query: string }) => {
 	try {
 		const res = await fetch(`/api/locations?search=${encodeURIComponent(event.query)}`);
@@ -159,6 +208,9 @@ const emit = defineEmits<{
 }>();
 
 const onSubmit = () => {
+
+	console.log('onSubmit form', form);
+
 	if (!validate()) {
 		return;
 	}
@@ -170,6 +222,8 @@ const onSubmit = () => {
 		dateHeure: form.dateHeure!.toISOString(),
 		nombrePlaces: form.nombrePlaces!,
 	};
+	console.log('payload', payload)
+
 	emit('create', payload);
 };
 </script>
@@ -193,9 +247,13 @@ const onSubmit = () => {
 
 .field {
 	margin-bottom: 1.5rem;
+	display: flex;
+	flex-direction: column;
 }
 
 .p-error {
+	margin-top: 0.4rem;
 	font-size: 0.875rem;
+	color:red;
 }
 </style>
