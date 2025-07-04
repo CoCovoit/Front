@@ -1,5 +1,5 @@
 
-export function parseJwt(token: string): any {
+export function parseJwt(token: string): unknown {
     try {
         // Split the token into its components
         const base64Url = token.split('.')[1];

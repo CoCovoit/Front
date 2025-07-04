@@ -43,7 +43,7 @@ export const useUserStore = defineStore('user', {
 
                 this.currentUser = found
             }
-            catch (err: any) {
+            catch (err: unknown) {
                 this.error = err.message
                 this.currentUser = null
             }
@@ -67,7 +67,7 @@ export const useUserStore = defineStore('user', {
                 this.currentUser = found
                 this.currentUserTrajets = await getUserTrajets(found.id)
             }
-            catch (err: any) {
+            catch (err: unknown) {
                 this.error = err.message
                 this.currentUser = null
                 this.currentUserTrajets = []
@@ -92,7 +92,7 @@ export const useUserStore = defineStore('user', {
                     this.currentUserTrajets.push(newTrajet)
                 }
                 return newTrajet
-            } catch (err: any) {
+            } catch (err: unknown) {
                 this.error = err.message || 'Erreur lors de la création du trajet'
                 throw err
             } finally {
@@ -106,7 +106,7 @@ export const useUserStore = defineStore('user', {
             try {
                 this.currentUserTrajets = await getUserTrajets(userId)
             }
-            catch (err: any) {
+            catch (err: unknown) {
                 this.error = err.message
             }
             finally {
