@@ -69,6 +69,32 @@ button {
   cursor: pointer;
 }
 
+/* Scrollbar discrète pour Chrome, Edge et Safari */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Scrollbar pour Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+
 /* Suppression des animations pour les personnes qui les ont désactivées */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

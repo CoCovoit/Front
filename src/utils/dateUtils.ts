@@ -61,4 +61,14 @@ export const getRelativeDate = (dateString: string): string => {
   if (isToday(dateString)) return "Aujourd'hui";
   if (isTomorrow(dateString)) return "Demain";
   return formatDate(dateString);
-}; 
+};
+
+// Fonction pour formater l'heure en format 24h
+export const formatTime = (dateString: string): string => {
+  const date = new Date(dateString);
+  // format « 08:00 » en FR
+  return date.toLocaleTimeString('fr-FR', {
+    hour:   '2-digit',
+    minute: '2-digit'
+  });
+};

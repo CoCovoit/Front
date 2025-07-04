@@ -1,14 +1,15 @@
 <template>
 	<div class="trajet-card-container">
 		<div v-for="trajet in trajets" :key="trajet.id">
-			<div class="trajet-card">
+			<div class="trajet-card" @click="handleShowDetails(trajet)">
 				<div class="trajet-card-left">
-					<span class="trajet-card-date">{{ getRelativeDate(trajet.date) }} à {{ trajet.heure }}</span>
-					<span class="trajet-card-depart-arrivee">{{ trajet.depart }} → {{ trajet.arrivee }}</span>
-					<span class="trajet-card-places"> - {{ trajet.placesDisponibles }} / {{ trajet.places }}</span>
+					<span class="trajet-card-date">{{ getRelativeDate(trajet.dateHeure) }} à {{ formatTime(trajet.dateHeure)
+						}}</span>
+					<span class="trajet-card-depart-arrivee">{{ trajet.localisationDepart.adresse }} → {{ trajet.localisationArrivee.adresse }}</span>
+					<span class="trajet-card-places">{{role(trajet.role)}} - {{randint(trajet.nombrePlaces)}} / {{ trajet.nombrePlaces }}</span>
 				</div>
-				<div class="trajet-card-right">
-					<Button class="trajet-card-button" label="Détails"/>
+				<div v-if="!isMobile || isPastTrip" class="trajet-card-right">
+					<Button class="trajet-card-button" label="Détails" @click="handleShowDetails(trajet)"/>
 				</div>
 			</div>
 		</div>
@@ -16,14 +17,33 @@
 </template>
 
 <script setup lang="ts">
-import {Trajet} from './index';
+import {Trajet, TrajetResponseDTO} from './index';
 import Button from 'primevue/button';
-import {getRelativeDate} from '@/utils/dateUtils';
+import {getRelativeDate, formatTime} from '@/utils/dateUtils';
+import {useIsMobile} from "@/utils/useIsMobile.ts";
+import {randint} from "../../utils/randomUtils.ts";
+
+
+const {isMobile} = useIsMobile()
 
 defineProps<{
-	trajets: Trajet[];
+	trajets: TrajetResponseDTO[];
+	isPastTrip : boolean;
 }>();
 
+// TODO: faire la logique de détails du trajet
+const handleShowDetails = (trajet: Trajet) => {
+	console.log('handleShowDetails trajet', trajet);
+}
+
+const role = (role : 'R' | 'C') => {
+	if (role === 'R') {
+		return 'Conducteur';
+	} else if (role === 'C') {
+		return 'Passager';
+	}
+	return '';
+}
 
 </script>
 
@@ -42,7 +62,7 @@ defineProps<{
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding:  16px ;
+		padding: 16px;
 		border-radius: 10px;
 		border: 1px solid #CBD5E1;
 		transition: ease-in-out 0.2s;

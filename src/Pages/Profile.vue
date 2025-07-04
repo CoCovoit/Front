@@ -1,7 +1,7 @@
 <template>
-<div>
-Cette parge est en cours de développement. Veuillez patienter.
-
+<div class="profile-page">
+  <h1>Mon Profil</h1>
+  Cette pages est en cours de développement.
 </div>
 </template>
 
