@@ -208,6 +208,9 @@ function onFromSelect(selected: object) {
 	console.log('onFromSelect')
 	console.log('onFromSelect rawFromResults.value',rawFromResults.value)
 	console.log('onFromSelect selected',selected.value)
+	console.log('onFromSelect form', form);
+
+
 	const item = rawFromResults.value.find(p => p.display_name === selected.value)
 	console.log('onFromSelect item', item);
 
@@ -242,6 +245,8 @@ async function onSearch() {
 		dateTime = new Date(form.date);
 		dateTime.setHours(form.time.getHours(), form.time.getMinutes());
 	}
+
+	console.log('form',form)
 	// console.log(rawFromResults);
 	console.log({
 		start: form.start,   // { lat: ..., lng: ... }
@@ -249,8 +254,94 @@ async function onSearch() {
 		date: form.date,
 		time: form.time
 	})
-	trajets.value = await getTrajetByProximite(form.start.lat, form.start.lng)
+
+	await getTrajetByProximite(form.start.lat, form.start.lng).then(data => {
+		console.log('getTrajetByProximite data', data);
+
+		trajets.value = filterTrajetsByExactDate(data);
+
+	}).catch(err => {
+		console.error('Error fetching trajets:', err);
+	});
+
+
 }
+
+/**
+ * Retourne un timestamp (ms) combinant form.date + form.time,
+ * ou null si form.date est null.
+ */
+function getCutoffTimestamp(date: Date | null, time: Date | null): number | null {
+	if (!date) return null;
+
+	const year  = date.getFullYear();
+	const month = date.getMonth();
+	const day   = date.getDate();
+
+	if (time) {
+		const h = time.getHours();
+		const m = time.getMinutes();
+		return new Date(year, month, day, h, m, 0, 0).getTime();
+	}
+
+	// minuit
+	return new Date(year, month, day, 0, 0, 0, 0).getTime();
+}
+
+/**
+ * Filtre et trie un tableau de TrajetResponseDTO selon form.date/form.time :
+ * - Si form.date est null, ne filtre pas (renvoie juste le trié).
+ * - Sinon ne garde que dateHeure >= cutoff, et trie croissant.
+ */
+function filterAndSortTrajetsByDate(
+		data: TrajetResponseDTO[]
+): TrajetResponseDTO[] {
+	const cutoff = getCutoffTimestamp(form.date, form.time);
+
+	console.log('cutoff', cutoff);
+
+	return data.filter(trajet => {
+				if (cutoff === null) return true;
+				return new Date(trajet.dateHeure).getTime() >= cutoff;
+			})
+			.sort((a, b) =>
+					new Date(a.dateHeure).getTime() - new Date(b.dateHeure).getTime()
+			);
+}
+
+/**
+ * Filtre et trie un tableau de TrajetResponseDTO pour ne garder
+ * que ceux dont la dateHeure tombe **le même jour** que form.date.
+ * Si form.date est null, renvoie tous les trajets (mais triés par ordre croissant).
+ */
+function filterTrajetsByExactDate(
+		data: TrajetResponseDTO[]
+): TrajetResponseDTO[] {
+	// Si aucune date sélectionnée, on renvoie tout (trié)
+	if (!form.date) {
+		return data.sort((a, b) =>
+				new Date(a.dateHeure).getTime() - new Date(b.dateHeure).getTime()
+		);
+	}
+
+	const year  = form.date.getFullYear();
+	const month = form.date.getMonth();
+	const day   = form.date.getDate();
+
+	return data
+			.filter(trajet => {
+				const d = new Date(trajet.dateHeure);
+				return (
+						d.getFullYear()  === year  &&
+						d.getMonth()     === month &&
+						d.getDate()      === day
+				);
+			})
+			.sort((a, b) =>
+					new Date(a.dateHeure).getTime() - new Date(b.dateHeure).getTime()
+			);
+}
+
 </script>
 
 <style scoped lang="scss">
