@@ -42,7 +42,7 @@ async function createUser(
     payload: UserRequestDTO
 ): Promise<UserResponseDTO> {
     try {
-        const response = await fetch(`${urlApi}Utilisateurs`, {
+        const response = await fetch(`${urlApi}/Utilisateurs`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ async function createUser(
 
 async function getUsers(): Promise<UserResponseDTO[]> {
     try {
-        const response = await fetch(`${urlApi}Utilisateurs`, {
+        const response = await fetch(`${urlApi}/Utilisateurs`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -83,7 +83,7 @@ async function getUserTrajets(
     idUser: number
 ): Promise<TrajetResponseDTO[]> {
     try {
-        const response = await fetch(`${urlApi}Utilisateurs/${idUser}/Trajets`, {
+        const response = await fetch(`${urlApi}/Utilisateurs/${idUser}/Trajets`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
