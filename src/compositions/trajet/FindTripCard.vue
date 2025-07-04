@@ -46,7 +46,6 @@ const emit = defineEmits<{
 function handleShowDetails(trajet: TrajetResponseDTO) {
 	emit('selectedTrip', trajet);
 }
-console.log('FindTripCard props',props)
 
 function handleBookTrip(trajet: TrajetResponseDTO) {
 	// Emit an event to the parent component to handle the booking logic

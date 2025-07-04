@@ -2,7 +2,7 @@
 	<section class="main-content">
 		<section class="left">
 			<form @submit.prevent="onSubmit" class="p-fluid">
-				<!-- Localisation de départ -->
+
 				<div class="field">
 					<label for="depart">Localisation de départ</label>
 					<Select v-model="form.localisationDepart" :options="allLocalisation" filter optionLabel="adresse" placeholder="Choisissez une adresse de départ" class="p-inputtext">
@@ -23,7 +23,6 @@
 					<small v-if="errors.localisationDepart" class="p-error">{{ errors.localisationDepart }}</small>
 				</div>
 
-				<!-- Localisation d'arrivée -->
 				<div class="field">
 					<label for="arrivee">Localisation d'arrivée</label>
 					<Select v-model="form.localisationArrivee" :options="allLocalisation" filter optionLabel="adresse" placeholder="Choisissez une adresse d'arrivée" class="p-inputtext">
@@ -44,7 +43,6 @@
 					<small v-if="errors.localisationArrivee" class="p-error">{{ errors.localisationArrivee }}</small>
 				</div>
 
-				<!-- Date & heure -->
 				<div class="field">
 					<DefaultInput
 							id="dateHeure"
@@ -57,7 +55,6 @@
 					<small v-if="errors.dateHeure" class="p-error">{{ errors.dateHeure }}</small>
 				</div>
 
-				<!-- Nombre de places -->
 				<div class="field">
 					<DefaultInput
 							id="nombrePlaces"
@@ -71,7 +68,6 @@
 					<small v-if="errors.nombrePlaces" class="p-error">{{ errors.nombrePlaces }}</small>
 				</div>
 
-				<!-- Bouton de soumission -->
 				<div class="field">
 					<Button label="Créer le trajet" icon="pi pi-check" type="submit"/>
 				</div>
@@ -144,7 +140,6 @@ onMounted(async ()=>{
 watch(
 		() => form.localisationDepart,
 		(loc) => {
-			console.log('form.localisationDepart', loc);
 
 			if (loc) {
 				// ajustez ici les noms de propriétés en fonction de votre type Localisation
@@ -161,7 +156,6 @@ watch(
 watch(
 		() => form.localisationArrivee,
 		(loc) => {
-			console.log('form.localisationDepart', loc);
 
 			if (loc) {
 				end.value = {
@@ -184,8 +178,6 @@ const validate = (): boolean => {
 };
 const onSubmit = async () => {
 
-	console.log('onSubmit form', form);
-
 	if (!validate()) {
 		return;
 	}
@@ -197,7 +189,6 @@ const onSubmit = async () => {
 		dateHeure: form.dateHeure!.toISOString(),
 		nombrePlaces: parseInt(form.nombrePlaces!),
 	};
-	console.log('payload', payload)
 	try {
 		const newTrajet = await userStore.createUserTrajet(payload)
 		toast.add({

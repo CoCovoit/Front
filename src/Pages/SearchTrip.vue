@@ -1,8 +1,6 @@
-<!-- SearchTripForm.vue -->
 <template>
 	<section class="top-search py-4 surface-0">
 		<form @submit.prevent="onSearch" class="form">
-			<!-- Départ -->
 			<div class="w-full md:w-4 form-input">
 				<InputGroup>
 					<InputGroupAddon>
@@ -179,7 +177,6 @@ async function fetchPlaces(q: string): Promise<Suggestion[]> {
 
 function handleSelectedTrip(trip: TrajetResponseDTO) {
 	selectedTrip.value = trip
-	console.log('Selected trip:', trip);
 
 	start.value = {
 		lat: trip.localisationDepart.latitude,
@@ -200,7 +197,6 @@ function searchFrom(e: { query: string }) {
 	}
 	fetchPlaces(e.query).then(data => {
 		rawFromResults.value = data;
-		console.log('data', data);
 		fromSuggestions.value = data.map(p => p.display_name);
 	});
 }

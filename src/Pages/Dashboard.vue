@@ -96,8 +96,6 @@ const upcomingTrips = computed(() =>
             new Date(a.dateHeure).getTime() - new Date(b.dateHeure).getTime()
         )
 )
-import { mockTrajets } from '../data/mokeTravels';
-const trajets = ref<Trajet[]>(mockTrajets);
 </script>
 
 <style scoped lang="scss">

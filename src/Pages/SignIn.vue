@@ -148,13 +148,7 @@ const handleSubmit = async () => {
 
   try {
     loading.value = true
-    // TODO: Implémenter la logique d'inscription
-    console.log('Inscription attempt:', {
-      firstName: firstName.value,
-      lastName: lastName.value,
-      email: email.value,
-      password: password.value,
-    })
+
   } catch (error) {
     console.error('Inscription error:', error)
   } finally {

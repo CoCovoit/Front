@@ -76,48 +76,11 @@ const router = createRouter({
     routes
 })
 
-// Guard global
-// router.beforeEach(async (to, from, next) => {
-//     const {keycloak} = useKeycloak();
-//
-//     console.log('keycloak',keycloak);
-//     console.log('keycloak.value?.authenticated',keycloak.value?.authenticated);
-//     console.log('keycloak.value',keycloak.value);
-//
-//     // Si la route n'a pas besoin d'auth, on passe
-//     if (!to.meta.requiresAuth) {
-//         return next();
-//     }
-//
-//     // Si pas authentifié, redirige vers /login
-//     if (!keycloak.value?.authenticated) {
-//         console.log('Utilisateur non authentifié, redirection vers la page de connexion');
-//         return next({name: 'login'});
-//     }
-//
-//     // Si des rôles sont requis, vérifie-les
-//     const requiredRoles = to.meta.requiredRoles as string[] | undefined;
-//     if (requiredRoles && requiredRoles.length > 0) {
-//         const hasRole = requiredRoles.some(role =>
-//             keycloak.value?.hasRealmRole(role)
-//         );
-//         if (!hasRole) {
-//             return next({name: 'dashboard'});
-//         }
-//     }
-//
-//     // Tout est ok
-//     next();
-// });
+
 
 router.beforeEach((to, from, next) => {
     const { keycloak, isAuthenticated } = useKeycloak()
     const userStore = useUserStore()
-
-
-    console.log('keycloak',keycloak);
-    console.log('keycloak.value?.authenticated',keycloak.value?.authenticated);
-    console.log('keycloak.value',keycloak.value);
 
     // pas d’auth nécessaire ?
     if (!to.meta.requiresAuth) {
