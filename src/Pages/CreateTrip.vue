@@ -126,8 +126,6 @@ const form = reactive<FormState>({
 	nombrePlaces: null,
 });
 
-const suggestions = ref<Location[]>([]);
-
 const errors = reactive<Partial<Record<keyof FormState, string>>>({});
 
 const allLocalisation = ref<Localisation[]>([]);
@@ -208,7 +206,7 @@ const onSubmit = async () => {
 			detail: `De ${newTrajet.localisationDepart.adresse} vers ${newTrajet.localisationArrivee.adresse} .`,
 			life: 3000
 		})
-	} catch (err: any) {
+	} catch (err: unknown) {
 		toast.add({
 			severity: 'error',
 			summary: 'Erreur',
