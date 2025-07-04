@@ -5,17 +5,17 @@
 			<div v-for="trajet in trajets" :key="trajet.id" class="elements">
 				<div class="conducteur">
 					<div class="avatar-container">
-						<Avatar shape="circle" size="xlarge" :image="user.avatar"/>
-						<span class="name">{{ user.name }}</span>
+						<Avatar shape="circle" size="xlarge" :label="trajet.conducteur.nom[0]"/>
+						<span class="name">{{ trajet.conducteur.nom }}</span>
 					</div>
 				</div>
 				<div class="trajet-card" @click="handleShowDetails(trajet)">
 					<div class="trajet-card-left">
 					<span class="trajet-card-date">{{ getRelativeDate(trajet.dateHeure) }} à {{ formatTime(trajet.dateHeure)
 						}}</span>
-						<span class="trajet-card-depart-arrivee">{{ trajet.depart }} → {{ trajet.arrivee }}</span>
-						<span class="trajet-card-places"> - {{ trajet.placesDisponibles }} / {{ trajet.places }}</span>
-						<span class="trajet-card-places">clio V</span>
+						<span class="trajet-card-depart-arrivee">{{ trajet.localisationDepart.adresse }} → {{ trajet.localisationArrivee.adresse }}</span>
+						<span class="trajet-card-places"> - {{ randint(trajet.nombrePlaces) }} / {{ trajet.nombrePlaces }}</span>
+						<span class="trajet-card-places">{{ getRandomCarModel() }}</span>
 					</div>
 					<div class="trajet-card-right">
 						<Button class="trajet-card-button" label="Réserver" @click="handleShowDetails(trajet)"/>
@@ -31,22 +31,14 @@
 import {formatTime, getRelativeDate} from "@/utils/dateUtils.ts";
 import Button from "primevue/button";
 import Avatar from "primevue/avatar";
+import {TrajetResponseDTO} from "@/compositions/trajet/index.ts";
+import {randint,getRandomCarModel} from "@/utils/randomUtils.ts";
 
 const props = defineProps<{
-	trajets: {
-		id: string;
-		depart: string;
-		arrivee: string;
-		dateHeure: Date;
-		placesDisponibles: number;
-		places: number;
-	}[];
-	user: {
-		name: string;
-		avatar: string;
-	};
-
+	trajets : TrajetResponseDTO[]
 }>();
+
+console.log('FindTripCard props',props)
 
 </script>
 

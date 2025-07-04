@@ -18,7 +18,7 @@
 							forceSelection
 							:loadingIcon="null"
 							@complete="searchFrom"
-							@select="onFromSelect"
+							@item-select="onFromSelect"
 					/>
 				</InputGroup>
 			</div>
@@ -70,13 +70,22 @@
 					label="Rechercher"
 					icon="pi pi-search"
 					class="w-full md:w-auto submit-button"
+
+					@click="onSearch"
+
 			/>
 		</form>
 	</section>
 
 	<section class="main-content">
-		<section class="list-trip">
-			<FindTripCard :user="user" :trajets="trajets"/>
+		{{ console.log('trajets', trajets) }}
+		<section v-if="trajets.length !== 0" class="list-trip">
+			<FindTripCard :trajets="trajets"/>
+		</section>
+		<section v-else>
+			<div class="list-trip">
+				<p>Aucun trajet trouvé pour cette recherche.</p>
+			</div>
 		</section>
 		<section v-if="!isMobile" class="map">
 			<MapComponent
@@ -101,8 +110,10 @@ import DefaultInput from '@/components/DefaultInput.vue';
 import MapComponent from '@/compositions/trajet/MapComponent.vue';
 import FindTripCard from '@/compositions/trajet/FindTripCard.vue';
 import {mockTrajets} from '@/data/mokeTravels.ts';
-import {Trajet} from '@/compositions/trajet';
+import {TrajetResponseDTO, useTrajet} from '@/compositions/trajet';
 import {useIsMobile} from '@/utils/useIsMobile.ts';
+
+const {getTrajetByProximite} = useTrajet();
 
 // Mobile detection
 const {isMobile} = useIsMobile();
@@ -116,11 +127,8 @@ const pointsOfInterest = [
 ];
 
 // Trajets
-const trajets = ref<Trajet[]>(mockTrajets);
-const user = {
-	name: 'Matteo Nossereau',
-	avatar: 'https://github.com/Matteo-Nossro.png'
-};
+const trajets = ref<TrajetResponseDTO[]>([]);
+
 // Formulaire
 const form = reactive({
 	start: {lat: 0, lng: 0},
@@ -190,15 +198,17 @@ function searchTo(e: { query: string }) {
 }
 
 // Sélection Autocomplete
-const emit = defineEmits<{
-	(e: 'update:start', coord: { lat: number; lng: number }): void;
-	(e: 'update:end', coord: { lat: number; lng: number }): void;
-}>();
+// const emit = defineEmits<{
+// 	(e: 'update:start', coord: { lat: number; lng: number }): void;
+// 	(e: 'update:end', coord: { lat: number; lng: number }): void;
+// }>();
 
 // Todo : le problème est la
-function onFromSelect(selected: string) {
+function onFromSelect(selected: object) {
 	console.log('onFromSelect')
-	const item = rawFromResults.value.find(p => p.display_name === selected)
+	console.log('onFromSelect rawFromResults.value',rawFromResults.value)
+	console.log('onFromSelect selected',selected.value)
+	const item = rawFromResults.value.find(p => p.display_name === selected.value)
 	console.log('onFromSelect item', item);
 
 	if (item) {
@@ -226,7 +236,7 @@ function onToSelect(selected: string) {
 
 
 // Soumission
-function onSearch() {
+async function onSearch() {
 	let dateTime: Date | null = null;
 	if (form.date && form.time) {
 		dateTime = new Date(form.date);
@@ -239,6 +249,7 @@ function onSearch() {
 		date: form.date,
 		time: form.time
 	})
+	trajets.value = await getTrajetByProximite(form.start.lat, form.start.lng)
 }
 </script>
 
