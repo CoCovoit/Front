@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch} from 'vue';
-import {TrajetResponseDTO} from '../compositions/trajet';
+import {TrajetResponseDTO} from '@/compositions/trajet';
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
