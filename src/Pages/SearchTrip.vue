@@ -16,7 +16,6 @@
 							:delay="300"
 							appendTo="body"
 							forceSelection
-							:loadingIcon="null"
 							@complete="searchFrom"
 							@item-select="onFromSelect"
 					/>
@@ -37,7 +36,6 @@
 							:delay="300"
 							appendTo="body"
 							forceSelection
-							:loadingIcon="null"
 							@complete="searchTo"
 							@select="onToSelect"
 					/>
@@ -78,7 +76,6 @@
 	</section>
 
 	<section class="main-content">
-		{{ console.log('trajets', trajets) }}
 		<section v-if="trajets.length !== 0" class="list-trip">
 			<FindTripCard :trajets="trajets"     @selected-trip="handleSelectedTrip"/>
 		</section>
@@ -141,7 +138,7 @@ const form = reactive({
 interface NominatimItem {
 	lat: string;
 	lon: string;
-	address?: any;
+	address?: unknown;
 }
 
 type Suggestion = NominatimItem & { display_name: string };
@@ -211,41 +208,17 @@ function searchTo(e: { query: string }) {
 	});
 }
 
-// Sélection Autocomplete
-// const emit = defineEmits<{
-// 	(e: 'update:start', coord: { lat: number; lng: number }): void;
-// 	(e: 'update:end', coord: { lat: number; lng: number }): void;
-// }>();
-
-// Todo : le problème est la
 function onFromSelect(selected: object) {
-	console.log('onFromSelect')
-	console.log('onFromSelect rawFromResults.value',rawFromResults.value)
-	console.log('onFromSelect selected',selected.value)
-	console.log('onFromSelect form', form);
-
-
 	const item = rawFromResults.value.find(p => p.display_name === selected.value)
-	console.log('onFromSelect item', item);
-
 	if (item) {
-		console.log('onFromSelect item', item);
 		form.start.lat = parseFloat(item.lat)
 		form.start.lng = parseFloat(item.lon)
 	}
-	console.log('onFromSelect form.start', form.start);
-
 }
 
 function onToSelect(selected: string) {
-	console.log('onToSelect')
-
 	const item = rawToResults.value.find(p => p.display_name === selected)
-	console.log('onToSelect item', item);
-
 	if (item) {
-		console.log('onToSelect item', item);
-
 		form.end.lat = parseFloat(item.lat)
 		form.end.lng = parseFloat(item.lon)
 	}
@@ -260,18 +233,7 @@ async function onSearch() {
 		dateTime.setHours(form.time.getHours(), form.time.getMinutes());
 	}
 
-	console.log('form',form)
-	// console.log(rawFromResults);
-	console.log({
-		start: form.start,   // { lat: ..., lng: ... }
-		end: form.end,     // { lat: ..., lng: ... }
-		date: form.date,
-		time: form.time
-	})
-
 	await getTrajetByProximite(form.start.lat, form.start.lng).then(data => {
-		console.log('getTrajetByProximite data', data);
-
 		trajets.value = filterTrajetsByExactDate(data);
 
 	}).catch(err => {
@@ -285,43 +247,43 @@ async function onSearch() {
  * Retourne un timestamp (ms) combinant form.date + form.time,
  * ou null si form.date est null.
  */
-function getCutoffTimestamp(date: Date | null, time: Date | null): number | null {
-	if (!date) return null;
-
-	const year  = date.getFullYear();
-	const month = date.getMonth();
-	const day   = date.getDate();
-
-	if (time) {
-		const h = time.getHours();
-		const m = time.getMinutes();
-		return new Date(year, month, day, h, m, 0, 0).getTime();
-	}
-
-	// minuit
-	return new Date(year, month, day, 0, 0, 0, 0).getTime();
-}
+// function getCutoffTimestamp(date: Date | null, time: Date | null): number | null {
+// 	if (!date) return null;
+//
+// 	const year  = date.getFullYear();
+// 	const month = date.getMonth();
+// 	const day   = date.getDate();
+//
+// 	if (time) {
+// 		const h = time.getHours();
+// 		const m = time.getMinutes();
+// 		return new Date(year, month, day, h, m, 0, 0).getTime();
+// 	}
+//
+// 	// minuit
+// 	return new Date(year, month, day, 0, 0, 0, 0).getTime();
+// }
 
 /**
  * Filtre et trie un tableau de TrajetResponseDTO selon form.date/form.time :
  * - Si form.date est null, ne filtre pas (renvoie juste le trié).
  * - Sinon ne garde que dateHeure >= cutoff, et trie croissant.
  */
-function filterAndSortTrajetsByDate(
-		data: TrajetResponseDTO[]
-): TrajetResponseDTO[] {
-	const cutoff = getCutoffTimestamp(form.date, form.time);
-
-	console.log('cutoff', cutoff);
-
-	return data.filter(trajet => {
-				if (cutoff === null) return true;
-				return new Date(trajet.dateHeure).getTime() >= cutoff;
-			})
-			.sort((a, b) =>
-					new Date(a.dateHeure).getTime() - new Date(b.dateHeure).getTime()
-			);
-}
+// function filterAndSortTrajetsByDate(
+// 		data: TrajetResponseDTO[]
+// ): TrajetResponseDTO[] {
+// 	const cutoff = getCutoffTimestamp(form.date, form.time);
+//
+// 	console.log('cutoff', cutoff);
+//
+// 	return data.filter(trajet => {
+// 				if (cutoff === null) return true;
+// 				return new Date(trajet.dateHeure).getTime() >= cutoff;
+// 			})
+// 			.sort((a, b) =>
+// 					new Date(a.dateHeure).getTime() - new Date(b.dateHeure).getTime()
+// 			);
+// }
 
 /**
  * Filtre et trie un tableau de TrajetResponseDTO pour ne garder
