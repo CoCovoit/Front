@@ -14,11 +14,11 @@
 					<span class="trajet-card-date">{{ getRelativeDate(trajet.dateHeure) }} à {{ formatTime(trajet.dateHeure)
 						}}</span>
 						<span class="trajet-card-depart-arrivee">{{ trajet.localisationDepart.adresse }} → {{ trajet.localisationArrivee.adresse }}</span>
-						<span class="trajet-card-places"> - {{ randint(trajet.nombrePlaces) }} / {{ trajet.nombrePlaces }}</span>
+						<span class="trajet-card-places">Passager - {{ randint(trajet.nombrePlaces) }} / {{ trajet.nombrePlaces }}</span>
 						<span class="trajet-card-places">{{ getRandomCarModel() }}</span>
 					</div>
 					<div class="trajet-card-right">
-						<Button class="trajet-card-button" label="Réserver" @click="handleShowDetails(trajet)"/>
+						<Button class="trajet-card-button" label="Réserver" @click.stop="handleBookTrip(trajet)"/>
 					</div>
 				</div>
 			</div>
@@ -38,7 +38,20 @@ const props = defineProps<{
 	trajets : TrajetResponseDTO[]
 }>();
 
+
+const emit = defineEmits<{
+	(e: 'selectedTrip', trajet: TrajetResponseDTO): void
+}>();
+
+function handleShowDetails(trajet: TrajetResponseDTO) {
+	emit('selectedTrip', trajet);
+}
 console.log('FindTripCard props',props)
+
+function handleBookTrip(trajet: TrajetResponseDTO) {
+	// Emit an event to the parent component to handle the booking logic
+	console.log('Booking trip:', trajet);
+}
 
 </script>
 

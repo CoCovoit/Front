@@ -54,6 +54,24 @@ const props = withDefaults(defineProps<{
   editable: true
 });
 
+const startIcon = new L.Icon({
+	iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+	shadowUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png',
+	iconSize:     [25, 41],
+	iconAnchor:   [12, 41],
+	popupAnchor:  [1, -34],
+	shadowSize:   [41, 41]
+});
+const endIcon = new L.Icon({
+	iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+	shadowUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png',
+	iconSize:     [25, 41],
+	iconAnchor:   [12, 41],
+	popupAnchor:  [1, -34],
+	shadowSize:   [41, 41]
+});
+
+
 watch(() => props.start, (newStart) => {
 	// if (newStart) {
 		console.log('Start point updated:', newStart);
@@ -142,8 +160,8 @@ onMounted(async () => {
 	console.log('props.start.lng',props.start.lng)
 
 	const initial =  {
-		lat: props.start?.lat,
-		lng:props.start?.lng
+		lat: props.start?.lat ?? 45.7566177381623,
+		lng:props.start?.lng ?? 4.868364463341703
 	};
 	map = L.map(mapContainer.value!, { zoomControl:false, attributionControl:false })
 			.setView([ initial.lat, initial.lng ], 13);
@@ -164,8 +182,8 @@ onMounted(async () => {
   const initWps: L.LatLng[] = [];
   // if (props.start) initWps.push(L.latLng(props.start.lat, props.start.lng));
   // if (props.end)   initWps.push(L.latLng(props.end.lat,   props.end.lng));
-  initWps.push(L.latLng(45.7566177381623, 4.868364463341703));
-  initWps.push(L.latLng( 45.758007,4.832016));
+  // initWps.push(L.latLng(45.7566177381623, 4.868364463341703));
+  // initWps.push(L.latLng( 45.758007,4.832016));
 
   routingControl = L.Routing.control({
     waypoints:           initWps,
@@ -175,24 +193,24 @@ onMounted(async () => {
 		fitSelectedRoutes:   false,
 		draggableWaypoints:  props.editable,
     routeWhileDragging:  props.editable,
-    createMarker(i, wp, nWps) {
-      const marker = L.marker(wp.latLng, {
-        draggable: props.editable,
-        icon: defaultIcon
-      }).addTo(map).bindPopup(i===0?'Départ':'Arrivée');
-      marker.on('dragend', e => {
-        const pos = (e.target as L.Marker).getLatLng();
-        // rebuild waypoints array
-        const pts = routingControl.getWaypoints().map((w,i2) =>
-            i2===i ? L.latLng(pos.lat,pos.lng) : w.latLng
-        );
-        routingControl.setWaypoints(pts);
-        // if (i===0) emit('update:start', {lat:pos.lat,lng:pos.lng});
-        // if (i===1) emit('update:end',   {lat:pos.lat,lng:pos.lng});
-      });
-      return marker;
-    }
-  }).addTo(map);
+		createMarker(i, wp) {
+			// i===0 → départ, i===1 → arrivée
+			const icon = (i === 0 ? startIcon : endIcon);
+			return L.marker(wp.latLng, {
+				draggable: props.editable,
+				icon: icon
+			})
+					.addTo(map)
+					.bindPopup(i === 0 ? 'Départ' : 'Arrivée')
+					.on('dragend', e => {
+						const pos = e.target.getLatLng();
+						const pts = routingControl.getWaypoints().map((w, idx) =>
+								idx === i ? L.latLng(pos.lat, pos.lng) : w.latLng
+						);
+						routingControl.setWaypoints(pts);
+					});
+		}
+	}).addTo(map);
 
   routingControl.on('waypointschanged', () => {
     const wps = routingControl.getWaypoints();

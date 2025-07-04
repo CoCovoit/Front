@@ -1,5 +1,6 @@
 <template>
 <div>
+Cette parge est en cours de développement. Veuillez patienter.
 
 </div>
 </template>

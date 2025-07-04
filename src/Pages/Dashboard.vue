@@ -38,7 +38,7 @@
 		<div class="dashboard-page-right">
 			<DefaultContainer title="Statistiques">
 				<div class="content">
-					<p>Vous n'avez pas de trajets</p>
+					<p>Vous n'avez pas encore de statistique</p>
 				</div>
 			</DefaultContainer>
 			<DefaultContainer title="Notifications">
@@ -46,7 +46,7 @@
 					<Notification title="Je suis un test" icon="pi pi-spin pi-cog"
 												description="je suis une superbe description aze  sd aze  qsd azaz daz dazdazd azdjazdj aoizqdjoqjsdizahj iazh dazhdoiqahdoiazdhoiazd azoid oiaz doiazdju oaizdjiazodjaodiaz oi dioad ioazd jaoizd oaizdio aoid oiqsdoiaz oidazoid azd j"
 												type="info"></Notification>
-					<p>Vous n'avez pas de trajets</p>
+					<p>Vous n'avez pas de notifications</p>
 				</div>
 			</DefaultContainer>
 		</div>

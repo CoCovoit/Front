@@ -80,7 +80,7 @@
 	<section class="main-content">
 		{{ console.log('trajets', trajets) }}
 		<section v-if="trajets.length !== 0" class="list-trip">
-			<FindTripCard :trajets="trajets"/>
+			<FindTripCard :trajets="trajets"     @selected-trip="handleSelectedTrip"/>
 		</section>
 		<section v-else>
 			<div class="list-trip">
@@ -109,7 +109,6 @@ import Button from 'primevue/button';
 import DefaultInput from '@/components/DefaultInput.vue';
 import MapComponent from '@/compositions/trajet/MapComponent.vue';
 import FindTripCard from '@/compositions/trajet/FindTripCard.vue';
-import {mockTrajets} from '@/data/mokeTravels.ts';
 import {TrajetResponseDTO, useTrajet} from '@/compositions/trajet';
 import {useIsMobile} from '@/utils/useIsMobile.ts';
 
@@ -119,7 +118,7 @@ const {getTrajetByProximite} = useTrajet();
 const {isMobile} = useIsMobile();
 
 // Carte
-const start = ref({lat: 48.8566, lng: 2.3522});
+const start = ref({lat: 45.7566177381623, lng:  4.868364463341703});
 const end = ref({lat: 48.8606, lng: 2.3376});
 const pointsOfInterest = [
 	{id: '1', position: {lat: 48.86, lng: 2.35}, iconUrl: 'https://i.pravatar.cc/100?img=5', popupText: 'Point 1'},
@@ -128,6 +127,7 @@ const pointsOfInterest = [
 
 // Trajets
 const trajets = ref<TrajetResponseDTO[]>([]);
+const selectedTrip = ref<TrajetResponseDTO | null>(null)
 
 // Formulaire
 const form = reactive({
@@ -169,6 +169,20 @@ async function fetchPlaces(q: string): Promise<Suggestion[]> {
 			display_name: [street, city, postcode].filter(Boolean).join(', ')
 		};
 	});
+}
+
+function handleSelectedTrip(trip: TrajetResponseDTO) {
+	selectedTrip.value = trip
+	console.log('Selected trip:', trip);
+
+	start.value = {
+		lat: trip.localisationDepart.latitude,
+		lng: trip.localisationDepart.longitude
+	};
+	end.value = {
+		lat: trip.localisationArrivee.latitude,
+		lng: trip.localisationArrivee.longitude
+	};
 }
 
 // Recherche Autocomplete

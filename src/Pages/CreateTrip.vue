@@ -308,4 +308,20 @@ const onSubmit = async () => {
 	font-size: 0.875rem;
 	color:red;
 }
+
+@media (max-width: 768px) {
+	.main-content {
+		padding: 0 1rem ;
+		flex-direction: column;
+		gap: 1.6rem;
+
+		.left, .right {
+			width: 100%;
+		}
+		.right{
+			height: 57vh;
+			overflow-y: clip;
+		}
+	}
+}
 </style>
