@@ -54,8 +54,8 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref, computed, watch} from 'vue';
-import {Trajet, useTrajet, TrajetResponseDTO} from '../compositions/trajet';
+import { ref, computed, watch} from 'vue';
+import {TrajetResponseDTO} from '../compositions/trajet';
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
@@ -64,54 +64,21 @@ import TabPanel from 'primevue/tabpanel';
 import UpcommingTrips from '../compositions/trajet/UpcommingTrips.vue';
 import NextTrip from '../compositions/trajet/NextTrip.vue';
 import DefaultContainer from '../components/DefaultContainer.vue';
-import {mockTrajets} from '../data/mokeTravels';
 import Notification from "@/compositions/notification/Notification.vue";
 import {useUserStore} from "@/compositions/user/userStore.ts";
-// const trajets = ref<Trajet[]>(mockTrajets);
-
 
 const userStore = useUserStore()
 
-// const allTrips = ref<TrajetResponseDTO[]>(mockTrajets)
 const allTrips = ref<TrajetResponseDTO[]>([])
 
-const now = ref(new Date())
-
-const currentUser = computed(() => userStore.currentUser)
 const currentUserTrajets = computed(() => userStore.currentUserTrajets)
 
-// currentUser.id = 1 // pour le mock, on force l'id à 1
-
-// au montage, fetch + parsing des dates
 
 watch(currentUserTrajets, (newCurrentUserTrajets) => {
-  console.log('newCurrentUserTrajets',newCurrentUserTrajets)
-
-  const test = newCurrentUserTrajets.filter(t => t.localisationArrivee.adresse === '')
-
-  const testAlltrips = newCurrentUserTrajets.map(t => ({ ...t, dateHeure: new Date(t.dateHeure) }))
-  const testpastTrips = newCurrentUserTrajets.filter(t => new Date(t.dateHeure).getTime() < Date.now())
-      .sort((a, b) =>
-          // on compare deux timestamps, du plus récent au plus ancien
-          new Date(b.dateHeure).getTime() - new Date(a.dateHeure).getTime()
-      )
-  const testupcomingTrips = newCurrentUserTrajets.filter(t => new Date(t.dateHeure).getTime() > Date.now())
-      .sort((a, b) =>
-          // on compare deux timestamps, du plus ancien au plus récent
-          new Date(a.dateHeure).getTime() - new Date(b.dateHeure).getTime()
-      )
-
-  console.log('test', test)
-  console.log('testAlltrips', testAlltrips)
-  console.log('testpastTrips', testpastTrips)
-  console.log('testupcomingTrips', testupcomingTrips)
-
   allTrips.value = newCurrentUserTrajets
-
 })
 
 // filtres + tris
-
 const pastTrips = computed(() =>
     allTrips.value
         .filter(t => new Date(t.dateHeure).getTime() < Date.now())
@@ -128,30 +95,6 @@ const upcomingTrips = computed(() =>
             // on compare deux timestamps, du plus ancien au plus récent
             new Date(a.dateHeure).getTime() - new Date(b.dateHeure).getTime()
         )
-)
-
-const nextTrip = computed(() =>
-    upcomingTrips.value.length > 0 ? upcomingTrips.value[0] : null
-)
-
-// helpers pour l’affichage
-const formatDate = (d: Date) =>
-		d.toLocaleString('fr-FR', {
-			weekday: 'short',
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit'
-		})
-
-const formatTrip = (t: TrajetResponseDTO) =>
-		`${t.localisationDepart.nom} → ${t.localisationArrivee.nom} — ${formatDate(
-				t.dateHeure as unknown as Date
-		)}`
-
-const nextTripDate = computed(() =>
-		nextTrip.value ? formatDate(nextTrip.value.dateHeure as unknown as Date) : ''
 )
 </script>
 
@@ -177,7 +120,6 @@ const nextTripDate = computed(() =>
 	}
 }
 
-/* ===== Responsivité ===== */
 @media (max-width: 780px) {
 	.dashboard-page {
 		flex-direction: column;
@@ -193,7 +135,6 @@ const nextTripDate = computed(() =>
 }
 
 @media (max-width: 640px) {
-	/* Resserrez les marges/paddings sur mobile si besoin */
 	.dashboard-page {
 		gap: 16px;
 	}
