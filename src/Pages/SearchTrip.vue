@@ -243,47 +243,6 @@ async function onSearch() {
 
 }
 
-/**
- * Retourne un timestamp (ms) combinant form.date + form.time,
- * ou null si form.date est null.
- */
-// function getCutoffTimestamp(date: Date | null, time: Date | null): number | null {
-// 	if (!date) return null;
-//
-// 	const year  = date.getFullYear();
-// 	const month = date.getMonth();
-// 	const day   = date.getDate();
-//
-// 	if (time) {
-// 		const h = time.getHours();
-// 		const m = time.getMinutes();
-// 		return new Date(year, month, day, h, m, 0, 0).getTime();
-// 	}
-//
-// 	// minuit
-// 	return new Date(year, month, day, 0, 0, 0, 0).getTime();
-// }
-
-/**
- * Filtre et trie un tableau de TrajetResponseDTO selon form.date/form.time :
- * - Si form.date est null, ne filtre pas (renvoie juste le trié).
- * - Sinon ne garde que dateHeure >= cutoff, et trie croissant.
- */
-// function filterAndSortTrajetsByDate(
-// 		data: TrajetResponseDTO[]
-// ): TrajetResponseDTO[] {
-// 	const cutoff = getCutoffTimestamp(form.date, form.time);
-//
-// 	console.log('cutoff', cutoff);
-//
-// 	return data.filter(trajet => {
-// 				if (cutoff === null) return true;
-// 				return new Date(trajet.dateHeure).getTime() >= cutoff;
-// 			})
-// 			.sort((a, b) =>
-// 					new Date(a.dateHeure).getTime() - new Date(b.dateHeure).getTime()
-// 			);
-// }
 
 /**
  * Filtre et trie un tableau de TrajetResponseDTO pour ne garder
