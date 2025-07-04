@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted, onBeforeUnmount, watch, withDefaults, defineProps, defineEmits, computed} from 'vue';
+import {ref, onMounted, onBeforeUnmount, watch, withDefaults, defineProps, computed} from 'vue';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine';
