@@ -27,8 +27,8 @@
 					</RouterLink>
 					<RouterLink to="/profil">
 						<div class="avatar-container">
-							<span class="text-sm">{{ user.name }}</span>
-							<Avatar shape="circle" size="xlarge" :image="user.avatar"/>
+							<span class="text-sm">{{ currentUser?.nom }}</span>
+							<Avatar shape="circle" size="xlarge"  :label="currentUser?.nom[0]"/>
 						</div>
 					</RouterLink>
 				</div>
@@ -42,8 +42,12 @@ import {RouterLink} from 'vue-router';
 import MainButton from './MainButton.vue';
 import Avatar from 'primevue/avatar';
 import {useIsMobile} from "@/utils/useIsMobile.ts";
+import {useUserStore} from "@/compositions/user/userStore.ts";
+import {computed} from "vue";
 
-const props = defineProps<{ user: { name: string; avatar: string } }>();
+const userStore = useUserStore()
+
+const currentUser = computed(() => userStore.currentUser)
 
 const {isMobile} = useIsMobile()
 
