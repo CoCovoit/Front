@@ -34,7 +34,7 @@ import Avatar from "primevue/avatar";
 import {TrajetResponseDTO} from "@/compositions/trajet/index.ts";
 import {randint,getRandomCarModel} from "@/utils/randomUtils.ts";
 
-const props = defineProps<{
+defineProps<{
 	trajets : TrajetResponseDTO[]
 }>();
 
