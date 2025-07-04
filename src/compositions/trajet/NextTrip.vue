@@ -29,7 +29,7 @@ import {randint} from "../../utils/randomUtils.ts";
 const {isMobile} = useIsMobile()
 
 
-const props = defineProps<{
+defineProps<{
 	trajet?: TrajetResponseDTO;
 }>();
 
