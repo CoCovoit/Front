@@ -5,7 +5,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 # Add the environment variables
-ENV VITE_API_ENDPOINT=http://localhost:44318/
+ENV VITE_API_ENDPOINT=http://localhost:44318
 ENV VITE_KEYCLOAK_REALM=company1
 ENV VITE_KEYCLOAK_URL=http://localhost:8081/
 ENV VITE_KEYCLOAK_CLIENTID=web-app
