@@ -5,16 +5,6 @@
 				<!-- Localisation de départ -->
 				<div class="field">
 					<label for="depart">Localisation de départ</label>
-<!--					<AutoComplete-->
-<!--							id="depart"-->
-<!--							v-model="form.localisationDepart"-->
-<!--							:suggestions="suggestions"-->
-<!--							field="name"-->
-<!--							dropdown-->
-<!--							@complete="searchLocations"-->
-<!--							placeholder="Rechercher..."-->
-<!--							class="p-inputtext"-->
-<!--					/>-->
 					<Select v-model="form.localisationDepart" :options="allLocalisation" filter optionLabel="adresse" placeholder="Choisissez une adresse de départ" class="p-inputtext">
 						<template #value="slotProps">
 							<div v-if="slotProps.value" class="flex items-center">
@@ -36,10 +26,6 @@
 				<!-- Localisation d'arrivée -->
 				<div class="field">
 					<label for="arrivee">Localisation d'arrivée</label>
-<!--					<Select filter v-model="form.localisationArrivee" placeholder="Choisissez une adresse d'arrivée"-->
-<!--					        :options="suggestions" optionLabel="name" optionValue="id" class="p-inputtext"-->
-<!--					/>-->
-					{{ console.log('allLocalisation',allLocalisation) }}
 					<Select v-model="form.localisationArrivee" :options="allLocalisation" filter optionLabel="adresse" placeholder="Choisissez une adresse d'arrivée" class="p-inputtext">
 						<template #value="slotProps">
 							<div v-if="slotProps.value" class="flex items-center">
@@ -55,19 +41,6 @@
 							</div>
 						</template>
 					</Select>
-
-					<!--
-
-							<AutoComplete-->
-<!--							id="arrivee"-->
-<!--							v-model="form.localisationArrivee"-->
-<!--							:suggestions="suggestions"-->
-<!--							field="name"-->
-<!--							dropdown-->
-<!--							@complete="searchLocations"-->
-<!--							placeholder="Rechercher..."-->
-<!--							class="p-inputtext"-->
-<!--					/>-->
 					<small v-if="errors.localisationArrivee" class="p-error">{{ errors.localisationArrivee }}</small>
 				</div>
 
@@ -123,7 +96,6 @@ import {ref, reactive, onMounted, watch, computed} from 'vue';
 import DefaultInput from '@/components/DefaultInput.vue';
 import Button from 'primevue/button';
 import MapComponent from "@/compositions/trajet/MapComponent.vue";
-import {useIsMobile} from "@/utils/useIsMobile.ts";
 import {Localisation, useLocalisation} from "@/compositions/localisation";
 import {Select} from "primevue";
 import {useUserStore} from "@/compositions/user/userStore.ts";
@@ -137,9 +109,6 @@ interface FormState {
 	nombrePlaces: number | null;
 }
 
-// Mobile detection
-const {isMobile} = useIsMobile();
-
 // Carte
 const start = ref({lat: 45.762278, lng: 4.84827});
 const end = ref({lat: 45.7564657, lng: 4.8683961});
@@ -148,10 +117,7 @@ const pointsOfInterest = [
 	{id: '2', position: {lat: 48.85, lng: 2.36}, iconUrl: 'https://i.pravatar.cc/100?img=8', popupText: 'Point 2'}
 ];
 
-
 const toast = useToast()
-
-// const conducteurId = store.state.user.id as number;
 
 const form = reactive<FormState>({
 	localisationDepart: null,
@@ -172,12 +138,8 @@ const userStore = useUserStore()
 
 const currentUser = computed(() => userStore.currentUser)
 
-
-
 onMounted(async ()=>{
-
 	allLocalisation.value = await getLocalisations();
-
 })
 
 // Watcher sur la sélection du départ
@@ -212,18 +174,6 @@ watch(
 		},
 		{ immediate: false }
 );
-const searchLocations = async (event: { query: string }) => {
-	try {
-		const res = await fetch(`/api/locations?search=${encodeURIComponent(event.query)}`);
-		const data: Location[] = await res.json();
-		suggestions.value = data;
-	} catch (err) {
-		console.error(err);
-		suggestions.value = [];
-	}
-};
-
-
 const validate = (): boolean => {
 	errors.localisationDepart = form.localisationDepart ? '' : 'Veuillez sélectionner une localisation de départ.';
 	errors.localisationArrivee = form.localisationArrivee ? '' : 'Veuillez sélectionner une localisation d\'arrivée.';
@@ -234,17 +184,6 @@ const validate = (): boolean => {
 					: 'Le nombre de places doit être un entier positif.';
 	return Object.values(errors).every(msg => !msg);
 };
-
-// const emit = defineEmits<{
-// 	(e: 'create', payload: {
-// 		// conducteurId: number;
-// 		localisationDepartId: number;
-// 		localisationArriveeId: number;
-// 		dateHeure: string;
-// 		nombrePlaces: number;
-// 	}): void;
-// }>();
-
 const onSubmit = async () => {
 
 	console.log('onSubmit form', form);
