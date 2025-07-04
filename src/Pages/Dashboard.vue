@@ -110,25 +110,6 @@ watch(currentUserTrajets, (newCurrentUserTrajets) => {
 
 })
 
-// onMounted(async () => {
-// 	// await userStore.fetchUserByEmail()
-//   console.log('currentUser', currentUser.value)
-//
-//
-// 	// await userStore.fetchUserTrajets(currentUser.value?.id)
-//
-//   console.log('currentUserTrajet',currentUserTrajets.value)
-//
-//   const test = currentUserTrajets.value.filter(t => t.role === 'C')
-//
-//   console.log('test', test)
-//
-//
-//   //
-// 	// allTrips.value = currentUserTrajets.value
-// 	// 		.map(t => ({ ...t, dateHeure: new Date(t.dateHeure) }))
-// })
-
 // filtres + tris
 
 const pastTrips = computed(() =>
