@@ -83,7 +83,6 @@ async function getUserTrajets(
     idUser: number
 ): Promise<TrajetResponseDTO[]> {
     try {
-        console.log('getUserTrajets idUser', idUser);
         const response = await fetch(`${urlApi}/Utilisateurs/${idUser}/Trajets`, {
             method: 'GET',
             headers: {

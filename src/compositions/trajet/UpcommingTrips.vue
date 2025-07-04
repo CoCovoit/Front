@@ -21,7 +21,7 @@ import {Trajet, TrajetResponseDTO} from './index';
 import Button from 'primevue/button';
 import {getRelativeDate, formatTime} from '@/utils/dateUtils';
 import {useIsMobile} from "@/utils/useIsMobile.ts";
-import {randint} from "../../utils/randomUtils.ts";
+import {randint} from "@/utils/randomUtils.ts";
 
 
 const {isMobile} = useIsMobile()
@@ -31,7 +31,6 @@ defineProps<{
 	isPastTrip : boolean;
 }>();
 
-// TODO: faire la logique de détails du trajet
 const handleShowDetails = (trajet: Trajet) => {
 	console.log('handleShowDetails trajet', trajet);
 }

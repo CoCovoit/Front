@@ -33,8 +33,6 @@ const props = defineProps<{
 	trajet?: TrajetResponseDTO;
 }>();
 
-console.log('NextTrips props.trajet', props.trajet);
-
 const role = (role: 'R' | 'C') => {
 	if (role === 'R') {
 		return 'Conducteur';

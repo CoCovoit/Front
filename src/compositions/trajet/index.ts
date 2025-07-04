@@ -2,7 +2,6 @@ import {User, UserResponseDTO} from "../user";
 import {Localisation} from "@/compositions/localisation";
 
 
-// TODO: Peut être plutot des longitudes et latitudes ?
 export interface Trajet {
     id: string;
     date: Date;

@@ -99,11 +99,6 @@ const handleSubmit = async () => {
 
   try {
     loading.value = true
-    // TODO: Implémenter la logique de connexion
-    console.log('Login attempt:', {
-      email: email.value,
-      password: password.value,
-    })
   } catch (error) {
     console.error('Login error:', error)
   } finally {

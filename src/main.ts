@@ -43,11 +43,11 @@ const keycloakInitOptions = {
 const initApp = async () => {
     const app = createApp(App)
 
-    // 1️⃣ Pinia de base
+    // Pinia de base
     const pinia = createPinia()
     app.use(pinia)
 
-    // 2️⃣ PrimeVue + thème
+    // PrimeVue + thème
     app.use(PrimeVue, {
         theme: {
             preset: Aura,
@@ -55,18 +55,18 @@ const initApp = async () => {
         }
     })
 
-    // 3️⃣ ToastService (doit venir APRÈS PrimeVue)
+    // ToastService (doit venir APRÈS PrimeVue)
     app.use(ToastService)
     app.component('Toast', Toast)
 
 
-    // 5️⃣ Keycloak (on attend qu’il soit prêt)
+    // Keycloak (on attend qu’il soit prêt)
     await vueKeycloak.install(app, {
         config: keycloakConfig,
         initOptions: keycloakInitOptions
     })
 
-    // 6️⃣ Router et montage final
+    //  Router et montage final
     app.use(router)
     app.mount('#app')
 }
