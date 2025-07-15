@@ -93,15 +93,6 @@
 			/>
 		</section>
 	</section>
-
-
-  <MapComponent
-      theme="light"
-      :points-of-interest="[
-    { id:'1', position:{lat:48.86,lng:2.35}, iconUrl:'https://i.pravatar.cc/100?img=5', popupText:'Point 1' },
-    { id:'2', position:{lat:48.85,lng:2.36}, iconUrl:'https://i.pravatar.cc/100?img=8', popupText:'Point 2' }
-  ]"
-  />
 </template>
 
 <script setup lang="ts">
