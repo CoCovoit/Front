@@ -36,13 +36,12 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { Trajet, TrajetResponseDTO } from "./index";
+import {  TrajetResponseDTO } from "./index";
 import Button from "primevue/button";
 import { getRelativeDate, formatTime } from "@/utils/dateUtils";
 import { useIsMobile } from "@/utils/useIsMobile.ts";
 import { useUserStore } from "@/compositions/user/userStore.ts";
 import TrajetDetailsModal from "./TrajetDetailsModal.vue";
-import MapComponent from "./MapComponent.vue"; // Ajustez le chemin selon votre structure
 
 
 const {isMobile} = useIsMobile()
@@ -72,6 +71,10 @@ const handleShowDetails = (trajet: TrajetResponseDTO) => {
 	console.log("Modal state:", showDetailsModal.value);
 	console.log("Selected trajet:", selectedTrajet.value);
 };
+
+const handleCancelTrip = async (trajet: TrajetResponseDTO) => {
+	await userStore.cancelReservation(trajet.id)
+}
 
 const handleCancelTrip = async (trajet: TrajetResponseDTO) => {
 	await userStore.cancelReservation(trajet.id)
@@ -152,10 +155,10 @@ const role = (role: "R" | "C") => {
     }
   }
 
-  .trajet-card-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+	.trajet-card-right {
+		display: flex;
+		align-items: center;
+		gap: 10px;
 
 		.trajet-card-button {
 			border: 1px solid #CBD5E1;
