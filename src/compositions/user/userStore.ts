@@ -6,6 +6,7 @@ import {
     TrajetResponseDTO,
     useTrajet
 } from '@/compositions/trajet'
+import {ReservationRequestDTO, ReservationResponseDTO, useReservation} from "@/compositions/Reservation";
 
 interface userState {
     currentUser: UserResponseDTO | null
@@ -15,6 +16,7 @@ interface userState {
 }
 
 const { getUsers, getUserTrajets } = useUser()
+const { createReservation } = useReservation()
 const { createTrajets } = useTrajet()
 
 export const useUserStore = defineStore('user', {
@@ -108,6 +110,33 @@ export const useUserStore = defineStore('user', {
             }
             catch (err: unknown) {
                 this.error = err.message
+            }
+            finally {
+                this.loading = false
+            }
+        },
+        /**
+         * Réserve une place : on stocke directement le trajet réservé
+         */        async reserveTrajet(trajetId: number): Promise<ReservationResponseDTO> {
+            if (!this.currentUser) {
+                throw new Error('Aucun utilisateur connecté')
+            }
+            this.loading = true
+            this.error = null
+
+            try {
+                const payload: ReservationRequestDTO = {
+                    utilisateurId: this.currentUser.id,
+                    trajetId
+                }
+                const resa = await createReservation(payload)
+                // On insère le trajet renvoyé par l'API en tête de currentUserTrajets
+                this.currentUserTrajets.unshift(resa.trajet)
+                return resa
+            }
+            catch (err: unknown) {
+                this.error = (err as Error).message || 'Erreur lors de la réservation'
+                throw err
             }
             finally {
                 this.loading = false
