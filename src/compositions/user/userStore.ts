@@ -142,6 +142,27 @@ export const useUserStore = defineStore('user', {
             finally {
                 this.loading = false
             }
+        },
+        async cancelReservation(trajetId: number): Promise<void> {
+            if (!this.currentUser) {
+                throw new Error('Aucun utilisateur connecté')
+            }
+            this.loading = true
+            this.error = null
+
+            try {
+                // On filtre simplement la liste pour retirer le trajet annulé
+                this.currentUserTrajets = this.currentUserTrajets.filter(
+                    t => t.id !== trajetId
+                )
+            }
+            catch (err: unknown) {
+                this.error = (err as Error).message || 'Erreur lors de l\'annulation de la réservation'
+                throw err
+            }
+            finally {
+                this.loading = false
+            }
         }
     }
 })
