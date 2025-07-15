@@ -163,6 +163,32 @@ export const useUserStore = defineStore('user', {
             finally {
                 this.loading = false
             }
+        },
+        /**
+         * MàJ front-only d'un trajet déjà en state (prototype)
+         */
+        async updateUserTrajet(updated: TrajetResponseDTO): Promise<void> {
+            if (!this.currentUser) {
+                throw new Error('Aucun utilisateur connecté')
+            }
+            this.loading = true
+            this.error = null
+
+            try {
+                const idx = this.currentUserTrajets.findIndex(t => t.id === updated.id)
+                if (idx === -1) {
+                    throw new Error(`Trajet non trouvé (id=${updated.id})`)
+                }
+                // on remplace l'ancien trajet par le nouveau
+                this.currentUserTrajets.splice(idx, 1, updated)
+            }
+            catch (err: unknown) {
+                this.error = (err as Error).message || 'Erreur lors de la mise à jour du trajet'
+                throw err
+            }
+            finally {
+                this.loading = false
+            }
         }
     }
 })
