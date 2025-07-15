@@ -7,11 +7,11 @@
 					}} à {{ formatTime(trajet.dateHeure) }} </span>
 				<span class="next-trip-middle-depart-arrivee">{{ trajet.localisationDepart.adresse
 					}} → {{ trajet.localisationArrivee.adresse }}</span>
-				<span class="next-trip-middle-places"> {{ role(trajet.role) }} - {{randint(trajet.nombrePlaces)}} / {{ trajet.nombrePlaces
+				<span class="next-trip-middle-places"> {{ role(trajet.role) }} - {{trajet.nbrReservation}} / {{ trajet.nombrePlaces
 					}}</span>
 			</div>
 			<div class="next-trip-right">
-				<Button class="next-trip-button danger" label="Annuler"/>
+				<Button class="next-trip-button danger" label="Annuler" @click="handleCancelTrip(trajet)"/>
 				<Button class="next-trip-button" label="Voir les détails"/>
 			</div>
 		</div>
@@ -24,19 +24,24 @@ import Button from 'primevue/button';
 import {getRelativeDate, formatTime} from '@/utils/dateUtils';
 import {defineProps} from 'vue';
 import {useIsMobile} from "@/utils/useIsMobile.ts";
-import {randint} from "../../utils/randomUtils.ts";
+import {useUserStore} from "@/compositions/user/userStore.ts";
 
 const {isMobile} = useIsMobile()
-
+const userStore = useUserStore();
 
 defineProps<{
 	trajet?: TrajetResponseDTO;
 }>();
 
-const role = (role: 'R' | 'C') => {
-	if (role === 'R') {
+
+const handleCancelTrip = async (trajet: TrajetResponseDTO) => {
+	await userStore.cancelReservation(trajet.id)
+}
+
+const role = (role: 'P' | 'C') => {
+	if (role === 'C') {
 		return 'Conducteur';
-	} else if (role === 'C') {
+	} else if (role === 'P') {
 		return 'Passager';
 	}
 	return '';
