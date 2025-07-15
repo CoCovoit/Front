@@ -45,7 +45,8 @@ export interface TrajetResponseDTO {
     conducteur: UserResponseDTO;
     dateHeure: Date;
     nombrePlaces: number;
-    role: 'R' | 'C';
+    role: 'P' | 'C';
+    nbrReservation?:number
 }
 
 

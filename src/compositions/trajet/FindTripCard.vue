@@ -33,6 +33,12 @@ import Button from "primevue/button";
 import Avatar from "primevue/avatar";
 import {TrajetResponseDTO} from "@/compositions/trajet/index.ts";
 import {randint,getRandomCarModel} from "@/utils/randomUtils.ts";
+import {useUserStore} from "@/compositions/user/userStore.ts";
+import { useToast } from 'primevue/usetoast';
+
+const userStore = useUserStore()
+const toast = useToast()
+
 
 defineProps<{
 	trajets : TrajetResponseDTO[]
@@ -47,7 +53,26 @@ function handleShowDetails(trajet: TrajetResponseDTO) {
 	emit('selectedTrip', trajet);
 }
 
-function handleBookTrip(trajet: TrajetResponseDTO) {
+async function handleBookTrip(trajet: TrajetResponseDTO) {
+		console.log('handleBookTrip called with trajet:', trajet);
+    try {
+      await userStore.reserveTrajet(trajet.id)
+      // la liste userStore.currentUserTrajets inclut maintenant ce trajet
+			toast.add({
+				severity: 'success',
+				summary: 'Trajet Réservé',
+				detail: `Conducteur ${trajet.conducteur}.`,
+				life: 3000
+			})
+    } catch {
+			toast.add({
+				severity: 'error',
+				summary: 'Erreur de réservation',
+				detail: `erreur : ${userStore.error}.`,
+				life: 3000
+			})
+    }
+
 	// Emit an event to the parent component to handle the booking logic
 	console.log('Booking trip:', trajet);
 }
