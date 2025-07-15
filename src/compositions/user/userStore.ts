@@ -117,7 +117,8 @@ export const useUserStore = defineStore('user', {
         },
         /**
          * Réserve une place : on stocke directement le trajet réservé
-         */        async reserveTrajet(trajetId: number): Promise<ReservationResponseDTO> {
+         */
+        async reserveTrajet(trajetId: number): Promise<ReservationResponseDTO> {
             if (!this.currentUser) {
                 throw new Error('Aucun utilisateur connecté')
             }
